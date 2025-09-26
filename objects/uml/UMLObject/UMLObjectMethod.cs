@@ -2,9 +2,14 @@
 
 public class UMLObjectMethod
 {
-    public int Accessibility { get; set; }
+    public string Accessibility { get; set; }
     public string Name { get; set; }
     public string Type { get; set; }
 
-    public override string ToString() => $"";
+    public List<UMLObjectMethodParameter> Parameters { get; set; } = new();
+
+    private string GetAccessibilityAbbr() =>
+        this.Accessibility == "public" ? "+" : this.Accessibility == "private" ? "-" : "~";
+
+    public override string ToString() => $"{GetAccessibilityAbbr()} {Name}({string.Join(", ", Parameters.Select(p => $"{p.Name}: {p.Type}"))}): {Type}";
 }

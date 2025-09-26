@@ -29,48 +29,37 @@ partial class Form1
     /// </summary>
     private void InitializeComponent()
     {
-        pictureBox1 = new System.Windows.Forms.PictureBox();
-        button1 = new System.Windows.Forms.Button();
-        ((System.ComponentModel.ISupportInitialize)pictureBox1).BeginInit();
+        pbox_Diagram = new System.Windows.Forms.PictureBox();
+        ((System.ComponentModel.ISupportInitialize)pbox_Diagram).BeginInit();
         SuspendLayout();
         // 
-        // pictureBox1
+        // pbox_Diagram
         // 
-        pictureBox1.Location = new System.Drawing.Point(12, 35);
-        pictureBox1.Name = "pictureBox1";
-        pictureBox1.Size = new System.Drawing.Size(776, 403);
-        pictureBox1.TabIndex = 0;
-        pictureBox1.TabStop = false;
-        pictureBox1.Paint += pictureBox1_Paint;
-        pictureBox1.MouseDoubleClick += pictureBox1_MouseDoubleClick;
-        pictureBox1.MouseDown += pictureBox1_MouseDown;
-        pictureBox1.MouseMove += pictureBox1_MouseMove;
-        pictureBox1.MouseUp += pictureBox1_MouseUp;
-        // 
-        // button1
-        // 
-        button1.Location = new System.Drawing.Point(12, 6);
-        button1.Name = "button1";
-        button1.Size = new System.Drawing.Size(75, 23);
-        button1.TabIndex = 1;
-        button1.Text = "add object";
-        button1.UseVisualStyleBackColor = true;
-        button1.Click += button1_Click;
+        pbox_Diagram.Location = new System.Drawing.Point(12, 12);
+        pbox_Diagram.Name = "pbox_Diagram";
+        pbox_Diagram.Size = new System.Drawing.Size(776, 426);
+        pbox_Diagram.TabIndex = 0;
+        pbox_Diagram.TabStop = false;
+        pbox_Diagram.Paint += pictureBox1_Paint;
+        pbox_Diagram.MouseClick += pbox_Diagram_MouseClick;
+        pbox_Diagram.MouseDoubleClick += pictureBox1_MouseDoubleClick;
+        pbox_Diagram.MouseDown += pictureBox1_MouseDown;
+        pbox_Diagram.MouseMove += pictureBox1_MouseMove;
+        pbox_Diagram.MouseUp += pictureBox1_MouseUp;
         // 
         // Form1
         // 
         AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
         AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
         ClientSize = new System.Drawing.Size(800, 450);
-        Controls.Add(button1);
-        Controls.Add(pictureBox1);
+        Controls.Add(pbox_Diagram);
+        StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
         Text = "Form1";
-        ((System.ComponentModel.ISupportInitialize)pictureBox1).EndInit();
+        ((System.ComponentModel.ISupportInitialize)pbox_Diagram).EndInit();
         ResumeLayout(false);
     }
 
-    private System.Windows.Forms.PictureBox pictureBox1;
-    private System.Windows.Forms.Button button1;
+    private System.Windows.Forms.PictureBox pbox_Diagram;
 
     #endregion
 }

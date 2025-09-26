@@ -36,14 +36,12 @@ partial class Form_AddObject
         label1 = new System.Windows.Forms.Label();
         comboBox_Accessibility = new System.Windows.Forms.ComboBox();
         label2 = new System.Windows.Forms.Label();
-        comboBox_Type = new System.Windows.Forms.ComboBox();
-        label3 = new System.Windows.Forms.Label();
         button_Cancel = new System.Windows.Forms.Button();
         button_AddProperty = new System.Windows.Forms.Button();
         button_AddMethod = new System.Windows.Forms.Button();
         listbox_Methods = new System.Windows.Forms.ListBox();
         listbox_Properties = new System.Windows.Forms.ListBox();
-        comboBox_ExtensionProperty = new System.Windows.Forms.ComboBox();
+        comboBox_Stereotype = new System.Windows.Forms.ComboBox();
         lb = new System.Windows.Forms.Label();
         SuspendLayout();
         // 
@@ -56,7 +54,7 @@ partial class Form_AddObject
         // 
         // button_AddObject
         // 
-        button_AddObject.Location = new System.Drawing.Point(201, 331);
+        button_AddObject.Location = new System.Drawing.Point(524, 313);
         button_AddObject.Name = "button_AddObject";
         button_AddObject.Size = new System.Drawing.Size(75, 23);
         button_AddObject.TabIndex = 1;
@@ -74,6 +72,7 @@ partial class Form_AddObject
         // 
         // comboBox_Accessibility
         // 
+        comboBox_Accessibility.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
         comboBox_Accessibility.FormattingEnabled = true;
         comboBox_Accessibility.Location = new System.Drawing.Point(92, 38);
         comboBox_Accessibility.Name = "comboBox_Accessibility";
@@ -88,25 +87,9 @@ partial class Form_AddObject
         label2.TabIndex = 4;
         label2.Text = "accessibility";
         // 
-        // comboBox_Type
-        // 
-        comboBox_Type.FormattingEnabled = true;
-        comboBox_Type.Location = new System.Drawing.Point(92, 67);
-        comboBox_Type.Name = "comboBox_Type";
-        comboBox_Type.Size = new System.Drawing.Size(184, 23);
-        comboBox_Type.TabIndex = 5;
-        // 
-        // label3
-        // 
-        label3.Location = new System.Drawing.Point(12, 70);
-        label3.Name = "label3";
-        label3.Size = new System.Drawing.Size(74, 23);
-        label3.TabIndex = 6;
-        label3.Text = "Type:";
-        // 
         // button_Cancel
         // 
-        button_Cancel.Location = new System.Drawing.Point(12, 331);
+        button_Cancel.Location = new System.Drawing.Point(11, 313);
         button_Cancel.Name = "button_Cancel";
         button_Cancel.Size = new System.Drawing.Size(75, 23);
         button_Cancel.TabIndex = 7;
@@ -116,7 +99,7 @@ partial class Form_AddObject
         // 
         // button_AddProperty
         // 
-        button_AddProperty.Location = new System.Drawing.Point(183, 133);
+        button_AddProperty.Location = new System.Drawing.Point(506, 12);
         button_AddProperty.Name = "button_AddProperty";
         button_AddProperty.Size = new System.Drawing.Size(93, 23);
         button_AddProperty.TabIndex = 8;
@@ -126,7 +109,7 @@ partial class Form_AddObject
         // 
         // button_AddMethod
         // 
-        button_AddMethod.Location = new System.Drawing.Point(183, 232);
+        button_AddMethod.Location = new System.Drawing.Point(506, 149);
         button_AddMethod.Name = "button_AddMethod";
         button_AddMethod.Size = new System.Drawing.Size(93, 23);
         button_AddMethod.TabIndex = 9;
@@ -137,70 +120,70 @@ partial class Form_AddObject
         // listbox_Methods
         // 
         listbox_Methods.FormattingEnabled = true;
-        listbox_Methods.Location = new System.Drawing.Point(12, 261);
+        listbox_Methods.Location = new System.Drawing.Point(335, 178);
         listbox_Methods.Name = "listbox_Methods";
-        listbox_Methods.Size = new System.Drawing.Size(264, 49);
+        listbox_Methods.Size = new System.Drawing.Size(264, 109);
         listbox_Methods.TabIndex = 11;
         listbox_Methods.SelectedIndexChanged += listbox_Methods_SelectedIndexChanged;
         // 
         // listbox_Properties
         // 
         listbox_Properties.FormattingEnabled = true;
-        listbox_Properties.Location = new System.Drawing.Point(12, 162);
+        listbox_Properties.Location = new System.Drawing.Point(335, 41);
         listbox_Properties.Name = "listbox_Properties";
-        listbox_Properties.Size = new System.Drawing.Size(264, 49);
+        listbox_Properties.Size = new System.Drawing.Size(264, 79);
         listbox_Properties.TabIndex = 10;
         listbox_Properties.SelectedIndexChanged += listbox_Properties_SelectedIndexChanged;
+        listbox_Properties.DoubleClick += listbox_Properties_DoubleClick;
         // 
-        // comboBox_ExtensionProperty
+        // comboBox_Stereotype
         // 
-        comboBox_ExtensionProperty.FormattingEnabled = true;
-        comboBox_ExtensionProperty.Location = new System.Drawing.Point(92, 96);
-        comboBox_ExtensionProperty.Name = "comboBox_ExtensionProperty";
-        comboBox_ExtensionProperty.Size = new System.Drawing.Size(184, 23);
-        comboBox_ExtensionProperty.TabIndex = 12;
+        comboBox_Stereotype.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+        comboBox_Stereotype.FormattingEnabled = true;
+        comboBox_Stereotype.Location = new System.Drawing.Point(92, 67);
+        comboBox_Stereotype.Name = "comboBox_Stereotype";
+        comboBox_Stereotype.Size = new System.Drawing.Size(184, 23);
+        comboBox_Stereotype.TabIndex = 12;
         // 
         // lb
         // 
-        lb.Location = new System.Drawing.Point(12, 96);
+        lb.Location = new System.Drawing.Point(12, 67);
         lb.Name = "lb";
         lb.Size = new System.Drawing.Size(74, 23);
         lb.TabIndex = 13;
-        lb.Text = "Property:";
+        lb.Text = "Stereotype:";
         // 
         // Form_AddObject
         // 
         AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
         AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-        ClientSize = new System.Drawing.Size(288, 363);
+        ClientSize = new System.Drawing.Size(612, 345);
         Controls.Add(lb);
-        Controls.Add(comboBox_ExtensionProperty);
+        Controls.Add(comboBox_Stereotype);
         Controls.Add(listbox_Methods);
         Controls.Add(listbox_Properties);
         Controls.Add(button_AddMethod);
         Controls.Add(button_AddProperty);
         Controls.Add(button_Cancel);
-        Controls.Add(label3);
-        Controls.Add(comboBox_Type);
         Controls.Add(label2);
         Controls.Add(comboBox_Accessibility);
         Controls.Add(label1);
         Controls.Add(button_AddObject);
         Controls.Add(textbox_Name);
+        StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
         Text = "Form_AddObject";
+        Load += Form_AddObject_Load;
         ResumeLayout(false);
         PerformLayout();
     }
 
-    private System.Windows.Forms.ComboBox comboBox_ExtensionProperty;
+    private System.Windows.Forms.ComboBox comboBox_Stereotype;
     private System.Windows.Forms.Label lb;
 
     private System.Windows.Forms.ListBox listbox_Methods;
     private System.Windows.Forms.ListBox listbox_Properties;
 
     private System.Windows.Forms.Button button_AddObject;
-    private System.Windows.Forms.ComboBox comboBox_Type;
-    private System.Windows.Forms.Label label3;
     private System.Windows.Forms.Button button_Cancel;
     private System.Windows.Forms.Button button_AddProperty;
 

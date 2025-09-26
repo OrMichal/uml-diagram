@@ -16,10 +16,12 @@
       <Compile Update="Form_AddObjectProperty.cs">
         <SubType>Form</SubType>
       </Compile>
-    </ItemGroup>
-
-    <ItemGroup>
-      <Folder Include="graphics\" />
+      <Compile Update="Form_AddObjectMethod.cs">
+        <SubType>Form</SubType>
+      </Compile>
+      <Compile Update="Form_AddObjectMethodParameter.cs">
+        <SubType>Form</SubType>
+      </Compile>
     </ItemGroup>
 
 </Project>
