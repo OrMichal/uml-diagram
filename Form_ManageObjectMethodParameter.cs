@@ -2,17 +2,23 @@
 
 namespace uml_diagram;
 
-public partial class Form_AddObjectMethodParameter : Form
+public partial class Form_ManageObjectMethodParameter : Form
 {
     public UMLObjectMethodParameter Parameter = new();
-    public Form_AddObjectMethodParameter()
+    public Form_ManageObjectMethodParameter()
     {
         InitializeComponent();
     }
 
-    public Form_AddObjectMethodParameter(UMLObjectMethodParameter parameter) : this()
+    public Form_ManageObjectMethodParameter(UMLObjectMethodParameter parameter) : this()
     {
         this.Parameter = parameter;
+
+        this.textBox_Name.Text = Parameter.Name;
+        this.textBox_Type.Text = Parameter.Type;
+        
+        this.button_Add.Text = "change parameter";
+        this.Refresh();
     }
 
     private void button_Add_Click(object sender, EventArgs e)

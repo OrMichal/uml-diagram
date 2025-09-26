@@ -1,20 +1,23 @@
 ﻿using System.Diagnostics;
+using System.Drawing.Drawing2D;
+using System.Drawing.Text;
+using System.Net.Mime;
 using uml_diagram.core;
 using uml_diagram.interfaces;
 using uml_diagram.ui;
 
 namespace uml_diagram.objects.uml;
 
-public sealed class UMLObject : IDrawable, IInteractable
+public sealed class UMLObject : IComponent, IInteractable, IAbstractable
 {
     public string? Stereotype { get; set; }
     public string Name { get; set; }
     public string Accessibility { get; set; }
     public List<UMLObjectProperty> Properties { get; set; } = new();
     public List<UMLObjectMethod> Methods { get; set; } = new();
-    
-    public Point Location { get; set; }
+    public PointF Location { get; set; }
     public SizeF Size { get; set; }
+    public bool Abstract { get; set; } = false;
     
     private int padding = 4;
     private int margin = 4;
@@ -35,7 +38,10 @@ public sealed class UMLObject : IDrawable, IInteractable
 
     public bool IsCursorHovering(MouseEventArgs e)
     {
-        return true;
+        bool containsX = e.X > this.Location.X && e.X < this.Location.X + this.Size.Width;
+        bool containsY = e.Y > this.Location.Y && e.Y < this.Location.Y + this.Size.Height;
+        
+        return containsX && containsY;
     }
 
     public void OnDoubleClick(MouseEventArgs e)
@@ -45,65 +51,102 @@ public sealed class UMLObject : IDrawable, IInteractable
 
     public void Draw(Graphics g)
     {
-        this.Size = GetSize(g);
-        PointF cursor = new(this.Location.X, this.Location.Y);
-        
-        g.DrawRectangle(DiagramSettings.ThickPen, cursor.X, cursor.Y, this.Size.Width, this.Size.Height);
-        
-        cursor.Y += g.MeasureString(Stereotype, DiagramSettings.Font).Height / 2;
-        cursor.X += this.Size.Width / 2 -
-                    g.MeasureString(Stereotype, DiagramSettings.Font).Width / 2;
-        g.DrawString(GetStereotype(), DiagramSettings.Font, DiagramSettings.LightBrush, cursor.X, cursor.Y);
+        g.SmoothingMode = SmoothingMode.AntiAlias;
+        g.TextRenderingHint = System.Drawing.Text.TextRenderingHint.AntiAliasGridFit;
 
-        cursor.Y += this.gap + g.MeasureString(Name, DiagramSettings.Font).Height / 2;
-        cursor.X = this.Location.X + this.margin + this.Size.Width / 2 - g.MeasureString(Name, DiagramSettings.Font).Width / 2;
-        g.DrawString(Name, DiagramSettings.Font, DiagramSettings.LightBrush, cursor.X, cursor.Y);
-        
-        cursor.Y += this.gap;
-        cursor.X = this.Location.X;
-        UIGraphics.DrawLineHorizontal(g, DiagramSettings.LightPen, cursor, this.Size.Width);
+        this.Size = GetSize(g);
+        PointF cursor = new PointF(this.Location.X, this.Location.Y);
+
+        g.DrawRectangle(DiagramSettings.ThickPen, cursor.X, cursor.Y, this.Size.Width, this.Size.Height);
+
+        StringFormat centerFormat = new StringFormat();
+        centerFormat.Alignment = StringAlignment.Center;
+        centerFormat.LineAlignment = StringAlignment.Center;
+
+        float headerHeight = g.MeasureString(this.Name, DiagramSettings.Font).Height * 2.5f;
+
+        RectangleF stereotypeBounds = new RectangleF(this.Location.X, this.Location.Y, this.Size.Width, headerHeight / 2);
+        RectangleF nameBounds = new RectangleF(this.Location.X, this.Location.Y + headerHeight / 2, this.Size.Width, headerHeight / 2);
+
+        g.DrawString(this.GetStereotype(), DiagramSettings.Font, DiagramSettings.LightBrush, stereotypeBounds, centerFormat);
+        g.DrawString(this.Name, new Font(DiagramSettings.Font, this.Abstract ? FontStyle.Italic : FontStyle.Regular), DiagramSettings.LightBrush, nameBounds, centerFormat);
+
+        float curY = this.Location.Y + headerHeight + this.gap;
+
+        UIGraphics.DrawLineHorizontal(g, DiagramSettings.LightPen, new PointF(this.Location.X, curY), this.Size.Width);
+        curY += this.gap;
 
         if (this.Properties.Count > 0)
         {
-            cursor.Y += this.gap;
-            UIGraphics.DrawFlexbox(g, DiagramSettings.Font, DiagramSettings.LightBrush, cursor, this.Properties.Select(x => x.ToString()), this.listIndent);
-            
-            cursor.Y += this.Properties.Count * (g.MeasureString(this.Properties[0].ToString(), DiagramSettings.Font).Height + this.listIndent);
-            cursor.X = this.Location.X;
-            UIGraphics.DrawLineHorizontal(g, DiagramSettings.LightPen, cursor, this.Size.Width);
+            curY += this.gap;
+
+            UIGraphics.DrawPropsFlexbox(g, DiagramSettings.Font, DiagramSettings.LightBrush, new PointF(this.Location.X, curY), this.Properties, this.listIndent);
+
+            curY += this.Properties.Count * (g.MeasureString(this.Properties[0].ToString(), DiagramSettings.Font).Height + this.listIndent);
+
+            UIGraphics.DrawLineHorizontal(g, DiagramSettings.LightPen, new PointF(this.Location.X, curY), this.Size.Width);
+            curY += this.gap;
         }
 
-        
         if (this.Methods.Count > 0)
         {
-            cursor.Y += this.gap;
-            UIGraphics.DrawFlexbox(g, DiagramSettings.Font, DiagramSettings.LightBrush, cursor, this.Methods.Select(x => x.ToString()), this.listIndent);
-            
-            cursor.Y += this.Properties.Count * (g.MeasureString(this.Properties[0].ToString(), DiagramSettings.Font).Height + this.listIndent);
-            cursor.X = this.Location.X;
-            UIGraphics.DrawLineHorizontal(g, DiagramSettings.LightPen, cursor, this.Size.Width);
+            curY += this.gap;
+
+            UIGraphics.DrawPropsFlexbox(g, DiagramSettings.Font, DiagramSettings.LightBrush, new PointF(this.Location.X, curY), this.Methods, this.listIndent);
+            curY += this.Methods.Count * (g.MeasureString(this.Methods[0].ToString(), DiagramSettings.Font).Height + this.listIndent);
         }
     }
 
     public SizeF GetSize(Graphics g)
     {
-        float width;
-        float height;
-        
         string longestPropertyName = Properties.Count > 0 ? Properties.MaxBy(s => s.ToString().Length).ToString() : "";
         string longestMethodName = Methods.Count > 0 ? Methods.MaxBy(s => s.ToString().Length).ToString() : "";
         string longest = new[] { longestMethodName, longestPropertyName, this.Name, GetStereotype() }.MaxBy(x => x.Length);
 
-        width = g.MeasureString(longest, DiagramSettings.Font).Width;
-        height = (this.Stereotype is not null ? g.MeasureString(this.Stereotype, DiagramSettings.Font).Height : 0)
-                 + this.gap
-                 + g.MeasureString(this.Name, DiagramSettings.Font).Height
-                 + this.gap
-                 + (this.Properties.Count > 0 ? this.Properties.Count * (g.MeasureString(this.Properties[0].ToString(), DiagramSettings.Font).Height + this.listIndent) : 0)
-                 + this.gap
-                 + (this.Methods.Count > 0 ? this.Methods.Count * (g.MeasureString(this.Methods[0].ToString(), DiagramSettings.Font).Height + this.listIndent) : 0)
-            ;
-        
-        return new(width, height);
+        float width = g.MeasureString(longest ?? "", DiagramSettings.Font).Width;
+
+        string stereotype = GetStereotype() ?? "";
+        float stereotypeHeight = string.IsNullOrEmpty(stereotype) ? 0f : g.MeasureString(stereotype, DiagramSettings.Font).Height;
+        float nameHeight = g.MeasureString(this.Name ?? "", DiagramSettings.Font).Height;
+
+        float headerInnerSpacing = !string.IsNullOrEmpty(stereotype) ? this.gap / 2f : 0f;
+        float headerHeight = stereotypeHeight + nameHeight + headerInnerSpacing;
+        float height = headerHeight;
+
+        height += 2f * this.gap;
+
+        if (this.Properties.Count > 0)
+        {
+            height += this.gap;
+
+            float propsTotal = 0f;
+            foreach (var p in this.Properties)
+            {
+                propsTotal += g.MeasureString(p.ToString(), DiagramSettings.Font).Height + this.listIndent;
+            }
+
+            height += propsTotal;
+
+            height += this.gap;
+        }
+
+        if (this.Methods.Count > 0)
+        {
+            height += this.gap;
+
+            float methodsTotal = 0f;
+            foreach (var m in this.Methods)
+            {
+                methodsTotal += g.MeasureString(m.ToString(), DiagramSettings.Font).Height + this.listIndent;
+            }
+
+            height += methodsTotal;
+        }
+
+        height += this.padding;
+
+        return new SizeF(width, height);
     }
+
+
 }

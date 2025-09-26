@@ -2,7 +2,7 @@
 
 namespace uml_diagram;
 
-partial class Form_AddObjectMethodParameter
+partial class Form_ManageObjectMethodParameter
 {
     /// <summary>
     /// Required designer variable.

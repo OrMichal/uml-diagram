@@ -35,6 +35,7 @@ partial class Form1
         // 
         // pbox_Diagram
         // 
+        pbox_Diagram.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
         pbox_Diagram.Location = new System.Drawing.Point(12, 12);
         pbox_Diagram.Name = "pbox_Diagram";
         pbox_Diagram.Size = new System.Drawing.Size(776, 426);

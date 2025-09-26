@@ -1,8 +1,12 @@
-﻿namespace uml_diagram.objects.uml;
+﻿using uml_diagram.interfaces;
 
-public class UMLObjectMethod
+namespace uml_diagram.objects.uml;
+
+public class UMLObjectMethod : IAbstractable
 {
     public string Accessibility { get; set; }
+    
+    public bool Abstract { get; set; } = false;
     public string Name { get; set; }
     public string Type { get; set; }
 

@@ -3,10 +3,10 @@ using uml_diagram.objects.uml;
 
 namespace uml_diagram;
 
-public partial class Form_AddObjectProperty : Form
+public partial class Form_ManageObjectProperty : Form
 {
     public UMLObjectProperty Property = new();
-    public Form_AddObjectProperty()
+    public Form_ManageObjectProperty()
     {
         InitializeComponent();
         foreach (var item in UMLObjectAccessibilityExtensions.GetAllAccessibilities())
@@ -16,6 +16,17 @@ public partial class Form_AddObjectProperty : Form
 
         comboBox_Accessibility.SelectedItem = "public";
         comboBox_Accessibility.Refresh();
+    }
+
+    public Form_ManageObjectProperty(UMLObjectProperty property): this()
+    {
+        this.Property = property;
+        
+        this.textBox_Name.Text = property.Name;
+        this.textBox_Type.Text = property.Type;
+        this.comboBox_Accessibility.Text = property.Accessibility;
+
+        this.button_Add.Text = "change property";
     }
 
     // add button
@@ -34,5 +45,10 @@ public partial class Form_AddObjectProperty : Form
     {
         DialogResult = DialogResult.Cancel;
         Close();
+    }
+
+    private void checkBox_Abstract_CheckedChanged(object sender, EventArgs e)
+    {
+        Property.Abstract = this.checkBox_Abstract.Checked;
     }
 }

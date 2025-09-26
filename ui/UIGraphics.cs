@@ -1,4 +1,6 @@
-﻿namespace uml_diagram.ui;
+﻿using uml_diagram.interfaces;
+
+namespace uml_diagram.ui;
 
 public static class UIGraphics
 {
@@ -12,12 +14,13 @@ public static class UIGraphics
         g.DrawLine(p, location.X, location.Y, location.X, location.Y + length);
     }
 
-    public static void DrawFlexbox(Graphics g, Font font, Brush brush, PointF location, IEnumerable<string> items, float gap = 2)
+    public static void DrawPropsFlexbox(Graphics g, Font font, Brush brush, PointF location, IEnumerable<IAbstractable> items, float gap = 2)
     {
         foreach (var item in items)
         {
-            g.DrawString(item, font, brush, location);
-            location.Y += gap + g.MeasureString(item, font).Height;
+            Font f = new(font, item.Abstract ? FontStyle.Italic : FontStyle.Regular);   
+            g.DrawString(item.ToString(), f, brush, location);
+            location.Y += gap + g.MeasureString(item.ToString(), f).Height;
         }
 
         location.Y -= gap;

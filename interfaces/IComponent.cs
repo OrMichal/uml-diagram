@@ -1,8 +1,8 @@
 ﻿namespace uml_diagram.interfaces;
 
-public interface IDrawable
+public interface IComponent
 {
-    public Point Location { get; set; }
+    public PointF Location { get; set; }
     public SizeF Size { get; set; }
     public void Draw(Graphics g);
 }

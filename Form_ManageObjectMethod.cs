@@ -3,10 +3,10 @@ using uml_diagram.objects.uml;
 
 namespace uml_diagram;
 
-public partial class Form_AddObjectMethod : Form
+public partial class Form_ManageObjectMethod : Form
 {
     public UMLObjectMethod Method = new();
-    public Form_AddObjectMethod()
+    public Form_ManageObjectMethod()
     {
         InitializeComponent();
 
@@ -19,6 +19,19 @@ public partial class Form_AddObjectMethod : Form
         comboBox_Accessibility.SelectedItem = "public";
     }
 
+    public Form_ManageObjectMethod(UMLObjectMethod method): this()
+    {
+        this.Method = method;
+
+        this.comboBox_Accessibility.Text = this.Method.Accessibility;
+        this.textBox_Name.Text = this.Method.Name;
+        this.textBox_Type.Text = this.Method.Type;
+
+        this.Method.Parameters.ForEach(p => this.listBox_Parameters.Items.Add(p.ToString()));
+
+        this.button_Add.Text = "change method";
+    }
+    
     private void button_Add_Click(object sender, EventArgs e)
     {
         Method.Accessibility = comboBox_Accessibility.SelectedItem.ToString();
@@ -42,12 +55,30 @@ public partial class Form_AddObjectMethod : Form
 
     private void button_AddParam_Click(object sender, EventArgs e)
     {
-        Form_AddObjectMethodParameter frm = new();
+        Form_ManageObjectMethodParameter frm = new();
         if (DialogResult.OK == frm.ShowDialog())
         {
             Method.Parameters.Add(frm.Parameter);
             listBox_Parameters.Items.Add(frm.Parameter.ToString());
             listBox_Parameters.Refresh();
         }
+    }
+
+    private void listBox_Parameters_DoubleClick(object sender, EventArgs e)
+    {
+        if(this.listBox_Parameters.Items.Count == 0) return;
+        
+        UMLObjectMethodParameter param = Method.Parameters[this.listBox_Parameters.SelectedIndex];
+        Form_ManageObjectMethodParameter frm = new(param);
+        if(DialogResult.OK == frm.ShowDialog())
+        {
+            param = frm.Parameter;
+            this.listBox_Parameters.Items[this.listBox_Parameters.SelectedIndex] = param.ToString();
+        }
+    }
+
+    private void checkBox_Abstract_CheckedChanged(object sender, EventArgs e)
+    {
+        Method.Abstract = this.checkBox_Abstract.Checked;
     }
 }

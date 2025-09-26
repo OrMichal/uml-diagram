@@ -2,7 +2,7 @@
 
 namespace uml_diagram;
 
-partial class Form_AddObject
+partial class Form_ManageObject
 {
     /// <summary>
     /// Required designer variable.
@@ -43,6 +43,7 @@ partial class Form_AddObject
         listbox_Properties = new System.Windows.Forms.ListBox();
         comboBox_Stereotype = new System.Windows.Forms.ComboBox();
         lb = new System.Windows.Forms.Label();
+        checkBox_Abstract = new System.Windows.Forms.CheckBox();
         SuspendLayout();
         // 
         // textbox_Name
@@ -125,6 +126,7 @@ partial class Form_AddObject
         listbox_Methods.Size = new System.Drawing.Size(264, 109);
         listbox_Methods.TabIndex = 11;
         listbox_Methods.SelectedIndexChanged += listbox_Methods_SelectedIndexChanged;
+        listbox_Methods.DoubleClick += listbox_Methods_DoubleClick;
         // 
         // listbox_Properties
         // 
@@ -153,11 +155,22 @@ partial class Form_AddObject
         lb.TabIndex = 13;
         lb.Text = "Stereotype:";
         // 
-        // Form_AddObject
+        // checkBox_Abstract
+        // 
+        checkBox_Abstract.Location = new System.Drawing.Point(12, 96);
+        checkBox_Abstract.Name = "checkBox_Abstract";
+        checkBox_Abstract.Size = new System.Drawing.Size(104, 24);
+        checkBox_Abstract.TabIndex = 15;
+        checkBox_Abstract.Text = "abstract";
+        checkBox_Abstract.UseVisualStyleBackColor = true;
+        checkBox_Abstract.CheckedChanged += checkBox_Abstract_CheckedChanged;
+        // 
+        // Form_ManageObject
         // 
         AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
         AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
         ClientSize = new System.Drawing.Size(612, 345);
+        Controls.Add(checkBox_Abstract);
         Controls.Add(lb);
         Controls.Add(comboBox_Stereotype);
         Controls.Add(listbox_Methods);
@@ -176,6 +189,8 @@ partial class Form_AddObject
         ResumeLayout(false);
         PerformLayout();
     }
+
+    private System.Windows.Forms.CheckBox checkBox_Abstract;
 
     private System.Windows.Forms.ComboBox comboBox_Stereotype;
     private System.Windows.Forms.Label lb;

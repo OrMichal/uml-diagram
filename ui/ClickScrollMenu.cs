@@ -12,8 +12,6 @@ public class ClickScrollMenu
         _listBox.Location = location;
         _listBox.Name = "ClickScrollMenu";
         _listBox.Size = new Size(100, 50);
-        _listBox.BackColor = Color.Black;
-        _listBox.ForeColor = Color.AliceBlue;
         _listBox.SelectedIndexChanged += OnSelectedIndexChanged;
         control.Add(_listBox);
     }
