@@ -29,7 +29,9 @@ partial class Form1
     /// </summary>
     private void InitializeComponent()
     {
+        components = new System.ComponentModel.Container();
         pbox_Diagram = new System.Windows.Forms.PictureBox();
+        timer1 = new System.Windows.Forms.Timer(components);
         ((System.ComponentModel.ISupportInitialize)pbox_Diagram).BeginInit();
         SuspendLayout();
         // 
@@ -48,6 +50,10 @@ partial class Form1
         pbox_Diagram.MouseMove += pictureBox1_MouseMove;
         pbox_Diagram.MouseUp += pictureBox1_MouseUp;
         // 
+        // timer1
+        // 
+        timer1.Tick += timer1_Tick;
+        // 
         // Form1
         // 
         AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
@@ -59,6 +65,8 @@ partial class Form1
         ((System.ComponentModel.ISupportInitialize)pbox_Diagram).EndInit();
         ResumeLayout(false);
     }
+
+    private System.Windows.Forms.Timer timer1;
 
     private System.Windows.Forms.PictureBox pbox_Diagram;
 

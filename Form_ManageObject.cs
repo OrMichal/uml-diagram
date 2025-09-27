@@ -35,7 +35,11 @@ public partial class Form_ManageObject : Form
         this.UmlObject = umlObject;
         this.textbox_Name.Text = this.UmlObject.Name;
         this.comboBox_Accessibility.Text = this.UmlObject.Accessibility;
+        
+        comboBox_Stereotype.Hide();
+        this.Controls.Add(new Label(){ Location = comboBox_Stereotype.Location, Text = umlObject.Stereotype});
         this.comboBox_Stereotype.Text = this.UmlObject.Stereotype;
+        this.checkBox_Abstract.Checked = umlObject.Abstract;
         
         this.UmlObject.Methods.ForEach(m => this.listbox_Methods.Items.Add(m.ToString()));
         this.UmlObject.Properties.ForEach(p => this.listbox_Properties.Items.Add(p.ToString()));

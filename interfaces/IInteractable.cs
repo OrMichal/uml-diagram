@@ -2,6 +2,6 @@
 
 public interface IInteractable
 {
-    public bool IsCursorHovering(MouseEventArgs e);
-    public void OnDoubleClick(MouseEventArgs e);
+    public bool IsCursorHovering(Point e);
+    public void OnDoubleClick(Point e);
 }

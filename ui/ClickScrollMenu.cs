@@ -5,42 +5,45 @@ namespace uml_diagram.ui;
 public class ClickScrollMenu
 {
     private Dictionary<string, Action> _options = new();
-    private ListBox _listBox = new();
+    public ContextMenuStrip _menu = new();
+    public event Action Payload;
+
+    public Point Location { get; set; }
+
+    public ClickScrollMenu()
+    {
+    }
     
     public ClickScrollMenu(Control.ControlCollection control, Point location)
     {
-        _listBox.Location = location;
-        _listBox.Name = "ClickScrollMenu";
-        _listBox.Size = new Size(100, 50);
-        _listBox.SelectedIndexChanged += OnSelectedIndexChanged;
-        control.Add(_listBox);
+        _menu.Location = location;
+        _menu.Name = "ClickScrollMenu";
+        _menu.Size = new Size(100, 50);
     }
 
-    public void Show()
+    public void Show(Control parent, Point location)
     {
-        _listBox.Refresh();
-        _listBox.Show();
-        _listBox.BringToFront();
+        _menu.Show(parent, location);
     }
 
     public void Hide()
     {
-        _listBox.Hide();
+        _menu.Hide();
     }
 
-    public void AddAction(string key, Action action)
+    public void AddAction(string key, Action<object?, EventArgs> action)
     {
-        _options.Add(key, action);
-        _listBox.Items.Add(key);
-        _listBox.Size = new Size(GetLongestOption().Length * 10  + 4, _options.Count * 20 + 2);
-        _listBox.Refresh();
+        ToolStripMenuItem item = new ToolStripMenuItem(key);
+        _menu.Items.Add(item);
+        item.Click += (sender, args) =>
+        {
+            action(sender, args);
+            Payload.Invoke();
+        };
+        _menu.Refresh();
     }
 
-    private void OnSelectedIndexChanged(object sender, EventArgs e)
-    {
-        _options[_listBox.SelectedItem.ToString()]();
-        Hide();
-    }
+    public ContextMenuStrip GetMenu() => this._menu;
 
     private string? GetLongestOption()
     {

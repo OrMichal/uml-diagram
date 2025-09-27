@@ -2,13 +2,14 @@
 using System.Drawing.Drawing2D;
 using System.Drawing.Text;
 using System.Net.Mime;
+using System.Text;
 using uml_diagram.core;
 using uml_diagram.interfaces;
 using uml_diagram.ui;
 
 namespace uml_diagram.objects.uml;
 
-public sealed class UMLObject : IComponent, IInteractable, IAbstractable
+public class UMLObject : IComponent, IInteractable
 {
     public string? Stereotype { get; set; }
     public string Name { get; set; }
@@ -19,10 +20,10 @@ public sealed class UMLObject : IComponent, IInteractable, IAbstractable
     public SizeF Size { get; set; }
     public bool Abstract { get; set; } = false;
     
-    private int padding = 4;
-    private int margin = 4;
-    private int gap = 6;
-    private int listIndent = 2;
+    protected int padding = 4;
+    protected int margin = 4;
+    protected int gap = 6;
+    protected int listIndent = 2;
     
     private string GetStereotype() => $"<<{Stereotype}>>";
     
@@ -36,7 +37,7 @@ public sealed class UMLObject : IComponent, IInteractable, IAbstractable
         this.Location = location;
     }
 
-    public bool IsCursorHovering(MouseEventArgs e)
+    public bool IsCursorHovering(Point e)
     {
         bool containsX = e.X > this.Location.X && e.X < this.Location.X + this.Size.Width;
         bool containsY = e.Y > this.Location.Y && e.Y < this.Location.Y + this.Size.Height;
@@ -44,12 +45,12 @@ public sealed class UMLObject : IComponent, IInteractable, IAbstractable
         return containsX && containsY;
     }
 
-    public void OnDoubleClick(MouseEventArgs e)
+    public void OnDoubleClick(Point e)
     {
         
     }
 
-    public void Draw(Graphics g)
+    public virtual void Draw(Graphics g)
     {
         g.SmoothingMode = SmoothingMode.AntiAlias;
         g.TextRenderingHint = System.Drawing.Text.TextRenderingHint.AntiAliasGridFit;
@@ -97,11 +98,11 @@ public sealed class UMLObject : IComponent, IInteractable, IAbstractable
         }
     }
 
-    public SizeF GetSize(Graphics g)
+    protected SizeF GetSize(Graphics g)
     {
-        string longestPropertyName = Properties.Count > 0 ? Properties.MaxBy(s => s.ToString().Length).ToString() : "";
-        string longestMethodName = Methods.Count > 0 ? Methods.MaxBy(s => s.ToString().Length).ToString() : "";
-        string longest = new[] { longestMethodName, longestPropertyName, this.Name, GetStereotype() }.MaxBy(x => x.Length);
+        string longestPropertyName = Properties.Count > 0 ? Properties?.MaxBy(s => s.ToString().Length).ToString() : "";
+        string longestMethodName = Methods.Count > 0 ? Methods?.MaxBy(s => s.ToString().Length).ToString() : "";
+        string longest = new[] { longestMethodName, longestPropertyName, this.Name, GetStereotype() ?? " " }.MaxBy(x => x.Length);
 
         float width = g.MeasureString(longest ?? "", DiagramSettings.Font).Width;
 
@@ -148,5 +149,19 @@ public sealed class UMLObject : IComponent, IInteractable, IAbstractable
         return new SizeF(width, height);
     }
 
+    public override string ToString()
+    {
+        StringBuilder sb = new();
+        foreach (var propertyInfo in typeof(UMLObject).GetProperties())
+        {
+            sb.Append($"{propertyInfo.Name}: {propertyInfo.GetValue(propertyInfo)}");
+        }
+        
+        foreach (var methodInfo in typeof(UMLObject).GetMethods())
+        {
+            sb.Append($"{methodInfo.Name}(): {methodInfo.GetType()}");
+        }
 
+        return sb.ToString();
+    }
 }
