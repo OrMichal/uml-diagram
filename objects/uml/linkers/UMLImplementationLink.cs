@@ -1,5 +1,7 @@
-﻿using uml_diagram.core;
+﻿using System.Drawing.Drawing2D;
+using uml_diagram.core;
 using uml_diagram.interfaces;
+using uml_diagram.math.geometries;
 using uml_diagram.objects.uml.components;
 
 namespace uml_diagram.objects.uml.linkers;
@@ -36,13 +38,15 @@ public class UMLImplementationLink : IComponent, IInteractable, ILink
     
     public void Draw(Graphics g) 
     {
+        Pen p = DiagramSettings.LightPen;
+        p.DashStyle = DashStyle.Dash;
         if (this.Target is UMLClass umlClass && this.Interface is UMLInterface umlInterface)
         {
-            g.DrawLine(DiagramSettings.LightPen, umlClass.Location, umlInterface.Location);
+            g.DrawLines(p, PositionGeometry.CalcRelationShipPath(umlClass, umlInterface));
         }
         else if (this.Target is UMLInterface umlTargetInterface && this.Interface is UMLInterface umlSrcInterface)
         {
-            g.DrawLine(DiagramSettings.LightPen, umlTargetInterface.Location, umlSrcInterface.Location);
+            g.DrawLines(p, PositionGeometry.CalcRelationShipPath(umlTargetInterface, umlSrcInterface));
         }
     }
 

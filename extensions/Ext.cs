@@ -35,4 +35,9 @@ public static class Ext
 
         throw new InvalidCastException();
     }
+
+    public static void RemoveSelectedItem(this ListBox lb)
+    {
+        lb.Items.RemoveAt(lb.SelectedIndex);
+    }
 }

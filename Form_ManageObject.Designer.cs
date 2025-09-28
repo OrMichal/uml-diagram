@@ -127,6 +127,7 @@ partial class Form_ManageObject
         listbox_Methods.TabIndex = 11;
         listbox_Methods.SelectedIndexChanged += listbox_Methods_SelectedIndexChanged;
         listbox_Methods.DoubleClick += listbox_Methods_DoubleClick;
+        listbox_Methods.KeyDown += listbox_Methods_KeyDown;
         // 
         // listbox_Properties
         // 
@@ -137,6 +138,7 @@ partial class Form_ManageObject
         listbox_Properties.TabIndex = 10;
         listbox_Properties.SelectedIndexChanged += listbox_Properties_SelectedIndexChanged;
         listbox_Properties.DoubleClick += listbox_Properties_DoubleClick;
+        listbox_Properties.KeyDown += listbox_Properties_KeyDown;
         // 
         // comboBox_Stereotype
         // 

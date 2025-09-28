@@ -62,6 +62,7 @@ partial class Form1
         Controls.Add(pbox_Diagram);
         StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
         Text = "Form1";
+        ResizeEnd += Form1_ResizeEnd;
         ((System.ComponentModel.ISupportInitialize)pbox_Diagram).EndInit();
         ResumeLayout(false);
     }

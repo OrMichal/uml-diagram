@@ -40,10 +40,6 @@ public class Diagram
         {
             if(GetHoveredComponent(ClickMenu.Location) is IImplementationTarget target) Linker.SetTarget(target);
         });
-        ClickMenu.AddAction("inherit from class", (sender, ev) =>
-        {
-                
-        });
 
         LinkableObjectDeleted += Linker.OnLinkableObjectDeleted;
     }

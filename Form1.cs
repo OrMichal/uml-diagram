@@ -100,4 +100,9 @@ public partial class Form1 : Form
     {
         this.pbox_Diagram.Refresh();
     }
+
+    private void Form1_ResizeEnd(object sender, EventArgs e)
+    {
+        pbox_Diagram.Size = this.Size;
+    }
 }

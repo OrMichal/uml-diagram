@@ -1,4 +1,5 @@
 ﻿using uml_diagram.enums;
+using uml_diagram.extensions;
 using uml_diagram.objects.uml;
 
 namespace uml_diagram;
@@ -80,5 +81,14 @@ public partial class Form_ManageObjectMethod : Form
     private void checkBox_Abstract_CheckedChanged(object sender, EventArgs e)
     {
         Method.Abstract = this.checkBox_Abstract.Checked;
+    }
+
+    private void listBox_Parameters_KeyDown(object sender, KeyEventArgs e)
+    {
+        if(e.KeyCode == Keys.Delete) 
+        {
+            Method.Parameters.RemoveAt(listBox_Parameters.SelectedIndex);
+            listBox_Parameters.RemoveSelectedItem();
+        }
     }
 }

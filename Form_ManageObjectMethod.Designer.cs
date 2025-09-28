@@ -129,6 +129,7 @@ partial class Form_ManageObjectMethod
         listBox_Parameters.TabIndex = 9;
         listBox_Parameters.SelectedIndexChanged += listBox_Parameters_SelectedIndexChanged;
         listBox_Parameters.DoubleClick += listBox_Parameters_DoubleClick;
+        listBox_Parameters.KeyDown += listBox_Parameters_KeyDown;
         // 
         // button_AddParam
         // 

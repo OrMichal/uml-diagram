@@ -1,5 +1,6 @@
 ﻿using uml_diagram.core;
 using uml_diagram.enums;
+using uml_diagram.extensions;
 using uml_diagram.objects.uml;
 
 namespace uml_diagram;
@@ -143,5 +144,24 @@ public partial class Form_ManageObject : Form
     private void checkBox_Unsafe_CheckedChanged(object sender, EventArgs e)
     {
         
+    }
+
+    private void listbox_Properties_KeyDown(object sender, KeyEventArgs e)
+    {
+        if (e.KeyCode == Keys.Delete)
+        {
+            UmlObject.Properties.RemoveAt(listbox_Properties.SelectedIndex);
+            listbox_Properties.RemoveSelectedItem();
+        }
+    }
+
+    private void listbox_Methods_KeyDown(object sender, KeyEventArgs e)
+    {
+        if (e.KeyCode == Keys.Delete)
+        {
+            UmlObject.Methods.RemoveAt(listbox_Methods.SelectedIndex);
+            listbox_Methods.RemoveSelectedItem();
+            
+        }
     }
 }
