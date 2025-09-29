@@ -9,4 +9,5 @@ public static class DiagramSettings
     public static Pen ThickPen = new(Color.Black, 3);
 
     public static Brush LightBrush = new SolidBrush(Color.Black);
+    public static Brush BgBrush = new SolidBrush(Color.CadetBlue);
 }

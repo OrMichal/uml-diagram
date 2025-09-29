@@ -15,7 +15,7 @@ public class UMLRecord : UMLObject
         this.Size = GetSize(g);
         PointF cursor = new PointF(this.Location.X, this.Location.Y);
 
-        g.DrawRectangle(DiagramSettings.ThickPen, cursor.X, cursor.Y, this.Size.Width, this.Size.Height);
+        g.DrawRectangle(DiagramSettings.MediumPen, cursor.X, cursor.Y, this.Size.Width, this.Size.Height);
 
         StringFormat centerFormat = new StringFormat();
         centerFormat.Alignment = StringAlignment.Center;

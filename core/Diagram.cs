@@ -12,6 +12,7 @@ public class Diagram
     private IComponent? _lastActive = null;
     public bool implementing = false;
     public Linker Linker = new();
+    private IComponent? _selectedComponent;
 
     public event Action<ILinkable> LinkableObjectDeleted;
     
@@ -86,6 +87,17 @@ public class Diagram
         return res;
     }
 
+    public void SelectComponent(Point e)
+    {
+        _selectedComponent = GetHoveredComponent(e);
+    }
+
+    public void RemoveSelectedComponent()
+    {
+        if(_selectedComponent is not null)
+            Components.Remove(_selectedComponent);
+    }
+    
     public void EditUMLObject(Point e)
     {
         UMLObject? umlObject = GetHoveredComponent(e) as UMLObject;
@@ -107,7 +119,17 @@ public class Diagram
 
     public void Draw(Graphics g)
     {
-        Components.ForEach(o => o.Draw(g));
+        Components.ForEach(o =>
+        {
+            if (_selectedComponent == o)
+            {
+                o.DrawSelected(g);
+            }
+            else
+            {
+                o.Draw(g);
+            }
+        });
         Linker.DrawLinks(g);
     }
 }

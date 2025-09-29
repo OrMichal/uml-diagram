@@ -5,9 +5,14 @@ using uml_diagram.ui;
 
 namespace uml_diagram.objects.uml.components;
 
-public class UMLClass : UMLObject, IInheritable, IAbstractable, IImplementationTarget
+public class UMLClass : UMLObject, IInheritable, IAbstractable, IImplementationTarget, IConnectableComponent
 {
     public string Guid {get; set;}
+    public PointF TopCenter { get => new PointF(Location.X + Size.Width / 2, Location.Y); }
+    public PointF RightCenter { get => new PointF(Location.X + Size.Width, Location.Y + Size.Height / 2); }
+    public PointF BottomCenter { get => new PointF(Location.X + Size.Width / 2, Location.Y + Size.Height); }
+    public PointF LeftCenter { get => new PointF(Location.X, Location.Y + Size.Height /2); }
+
     public UMLClass()
     {
         this.Guid = System.Guid.NewGuid().ToString();
@@ -26,7 +31,7 @@ public class UMLClass : UMLObject, IInheritable, IAbstractable, IImplementationT
         this.Size = GetSize(g);
         PointF cursor = new PointF(this.Location.X, this.Location.Y);
 
-        g.DrawRectangle(DiagramSettings.ThickPen, cursor.X, cursor.Y, this.Size.Width, this.Size.Height);
+        g.DrawRectangle(DiagramSettings.MediumPen, cursor.X, cursor.Y, this.Size.Width, this.Size.Height);
 
         StringFormat centerFormat = new StringFormat();
         centerFormat.Alignment = StringAlignment.Center;
@@ -37,7 +42,7 @@ public class UMLClass : UMLObject, IInheritable, IAbstractable, IImplementationT
         RectangleF stereotypeBounds = new RectangleF(this.Location.X, this.Location.Y, this.Size.Width, headerHeight / 2);
         RectangleF nameBounds = new RectangleF(this.Location.X, this.Location.Y + headerHeight / 2, this.Size.Width, headerHeight / 2);
 
-        g.DrawString(this.Name, new Font(DiagramSettings.Font, this.Abstract ? FontStyle.Italic : FontStyle.Regular), DiagramSettings.LightBrush, nameBounds, centerFormat);
+        g.DrawString(this.Name, new Font(DiagramSettings.Font, this.Abstract ? FontStyle.Italic : this.Static ? FontStyle.Underline : FontStyle.Regular), DiagramSettings.LightBrush, nameBounds, centerFormat);
 
         float curY = this.Location.Y + headerHeight + this.gap;
 

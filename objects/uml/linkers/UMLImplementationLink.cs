@@ -49,6 +49,20 @@ public class UMLImplementationLink : IComponent, IInteractable, ILink
             g.DrawLines(p, PositionGeometry.CalcRelationShipPath(umlTargetInterface, umlSrcInterface));
         }
     }
+    
+    public void DrawSelected(Graphics g) 
+    {
+        Pen p = DiagramSettings.LightPen;
+        p.DashStyle = DashStyle.Dash;
+        if (this.Target is UMLClass umlClass && this.Interface is UMLInterface umlInterface)
+        {
+            g.DrawLines(p, PositionGeometry.CalcRelationShipPath(umlClass, umlInterface));
+        }
+        else if (this.Target is UMLInterface umlTargetInterface && this.Interface is UMLInterface umlSrcInterface)
+        {
+            g.DrawLines(p, PositionGeometry.CalcRelationShipPath(umlTargetInterface, umlSrcInterface));
+        }
+    }
 
     public bool IsCursorHovering(Point e)
     {

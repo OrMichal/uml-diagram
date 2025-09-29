@@ -19,67 +19,23 @@ public static class PositionGeometry
         else return Quadrant.BottomLeft;
     }
 
-    public static (PointF, PointF) GetGatewaysByQuadrant(IComponent mainObject, IComponent secondObject, Quadrant quadrant)
-    {
-        bool secondObjCloserToXAxis = Math.Abs(secondObject.Location.X - mainObject.Location.X) < Math.Abs(secondObject.Location.Y - mainObject.Location.Y);
-        PointF mainObjectCenter = CalcComponentCenter(mainObject);
-        PointF secondObjectCenter = CalcComponentCenter(secondObject);
-
-        return quadrant switch
+    public static (PointF, PointF) GetGatewaysByQuadrant(IConnectableComponent mainObject, IConnectableComponent secondObject, Quadrant quadrant)
+        => quadrant switch
         {
-            Quadrant.TopLeft => new Func<(PointF, PointF)>(() =>
-                {
-                    if (secondObject.Location.Y > mainObject.Location.Y && secondObject.Location.Y < (mainObject.Location.Y + mainObject.Size.Height))
-                    {
-                        return (new PointF(mainObjectCenter.X, mainObject.Location.Y),
-                            new PointF(secondObjectCenter.X, secondObject.Location.Y));
-                    }
-
-                    return (new PointF(mainObjectCenter.X, mainObject.Location.Y), 
-                        new PointF(secondObjectCenter.X, secondObject.Location.Y + secondObject.Size.Height));
-                })(),
-            Quadrant.TopRight => new Func<(PointF, PointF)>(() =>
-                {
-                    if(secondObject.Location.Y > mainObject.Location.Y && secondObject.Location.Y < (mainObject.Location.Y + mainObject.Size.Height))
-                    {
-                        return (new PointF(mainObjectCenter.X, mainObject.Location.Y),
-                            new PointF(secondObjectCenter.X, secondObject.Location.Y));
-                    }
-                    
-                    return (new PointF(mainObjectCenter.X, mainObject.Location.Y), 
-                        new PointF(secondObjectCenter.X, secondObject.Location.Y + secondObject.Size.Height));
-                })(),
-            Quadrant.BottomRight => new Func<(PointF, PointF)>(() =>
-                {
-                    if (secondObject.Location.Y > mainObject.Location.Y &&
-                        secondObject.Location.Y < (mainObject.Location.Y + mainObject.Size.Height))
-                    {
-                        return (new PointF(mainObjectCenter.X, mainObject.Location.Y + mainObject.Size.Height), 
-                            new PointF(secondObjectCenter.X, secondObject.Location.Y + secondObject.Size.Height));
-                    }
-                    
-                    return (new PointF(mainObjectCenter.X, mainObject.Location.Y + mainObject.Size.Height), 
-                        new PointF(secondObjectCenter.X, secondObject.Location.Y));
-                })(),
-            Quadrant.BottomLeft => new Func<(PointF, PointF)>(() => 
-            {
-                    if (secondObject.Location.Y > mainObject.Location.Y &&
-                        secondObject.Location.Y < (mainObject.Location.Y + mainObject.Size.Height))
-                    {
-                        return (new PointF(mainObjectCenter.X, mainObject.Location.Y + mainObject.Size.Height), 
-                            new PointF(secondObjectCenter.X, secondObject.Location.Y + secondObject.Size.Height));
-                    }
-                    
-                    return (new PointF(mainObjectCenter.X, mainObject.Location.Y + mainObject.Size.Height), 
-                        new PointF(secondObjectCenter.X, secondObject.Location.Y));
-            })(),
-        }; 
-    }
+            Quadrant.TopLeft or Quadrant.TopRight => secondObject.Location.Y > mainObject.Location.Y &&
+                                                        secondObject.Location.Y < mainObject.Location.Y + (mainObject.Size.Height * 2)
+                ? (mainObject.TopCenter, secondObject.TopCenter)
+                : (mainObject.TopCenter, secondObject.BottomCenter),
+            Quadrant.BottomRight or Quadrant.BottomLeft => secondObject.Location.Y < mainObject.Location.Y &&
+                                                           secondObject.Location.Y > mainObject.Location.Y - (mainObject.Size.Height * 2)
+                ? (mainObject.BottomCenter, secondObject.BottomCenter)
+                : (mainObject.BottomCenter, secondObject.TopCenter),
+        };
     
-    public static (PointF, PointF) CalcComponentsGateways(IComponent mainObject, IComponent secondObject) => 
+    public static (PointF, PointF) CalcComponentsGateways(IConnectableComponent mainObject, IConnectableComponent secondObject) => 
         GetGatewaysByQuadrant(mainObject, secondObject, CalcComponentQuadrant(mainObject, secondObject));
 
-    public static PointF[] CalcRelationShipPath(IComponent mainObject, IComponent secondObject)
+    public static PointF[] CalcRelationShipPath(IConnectableComponent mainObject, IConnectableComponent secondObject)
     {
         (PointF mainObjectGateway, PointF secondObjectGateway) = CalcComponentsGateways(mainObject, secondObject);
         bool secondObjCloserToXAxis = Math.Abs(secondObject.Location.X - mainObject.Location.X) < Math.Abs(secondObject.Location.Y - mainObject.Location.Y);
@@ -88,94 +44,20 @@ public static class PositionGeometry
         
         return CalcComponentQuadrant(mainObject, secondObject) switch
         {
-            Quadrant.TopLeft => new Func<PointF[]>(() =>
+            Quadrant.TopLeft or Quadrant.TopRight => new PointF[] 
                 {
-                    if (secondObject.Location.Y > mainObject.Location.Y &&
-                        secondObject.Location.Y < (mainObject.Location.Y + mainObject.Size.Height))
-                    {
-                        return new PointF[] 
-                        {
-                            mainObjectGateway,
-                            new PointF(mainObjectGateway.X, mainObjectGateway.Y - 20),
-                            new PointF(secondObjectGateway.X, secondObjectGateway.Y - 20),
-                            secondObjectGateway
-                        };
-                    }
-
-                    return new PointF[]
-                    {
-                        mainObjectGateway,
-                        new PointF(mainObjectGateway.X, mainObjectGateway.Y - 20),
-                        new PointF(secondObjectGateway.X, mainObjectGateway.Y - 20),
-                        secondObjectGateway
-                    };
-                })(),
-            Quadrant.TopRight => new Func<PointF[]>(() =>
+                    mainObjectGateway,
+                    new PointF(mainObjectGateway.X, mainObjectGateway.Y - distY / 2),
+                    new PointF(secondObjectGateway.X, mainObjectGateway.Y - distY / 2),
+                    secondObjectGateway
+                },
+            Quadrant.BottomLeft or Quadrant.BottomRight => new PointF[] 
                 {
-                    if (secondObject.Location.Y > mainObject.Location.Y &&
-                        secondObject.Location.Y < (mainObject.Location.Y + mainObject.Size.Height))
-                    {
-                        return new PointF[] 
-                        {
-                            mainObjectGateway,
-                            new PointF(mainObjectGateway.X, mainObjectGateway.Y - 20),
-                            new PointF(secondObjectGateway.X, secondObjectGateway.Y - 20),
-                            secondObjectGateway
-                        };
-                    }
-
-                    return new PointF[]
-                    {
-                        mainObjectGateway,
-                        new PointF(mainObjectGateway.X, mainObjectGateway.Y - 20),
-                        new PointF(secondObjectGateway.X, mainObjectGateway.Y - 20),
-                        secondObjectGateway
-                    };
-                })(),
-            Quadrant.BottomRight => new Func<PointF[]>(() => 
-                {
-                    if (secondObject.Location.Y > mainObject.Location.Y &&
-                        secondObject.Location.Y < (mainObject.Location.Y + mainObject.Size.Height))
-                    {
-                        return new PointF[] 
-                        {
-                            mainObjectGateway,
-                            new PointF(mainObjectGateway.X, mainObjectGateway.Y + 20),
-                            new PointF(secondObjectGateway.X, secondObjectGateway.Y + 20),
-                            secondObjectGateway
-                        };
-                    }
-
-                    return new PointF[]
-                    {
-                        mainObjectGateway,
-                        new PointF(mainObjectGateway.X, mainObjectGateway.Y + 20),
-                        new PointF(secondObjectGateway.X, mainObjectGateway.Y + 20),
-                        secondObjectGateway
-                    };
-                })(),
-            Quadrant.BottomLeft => new Func<PointF[]>(() =>
-                {
-                    if (secondObject.Location.Y > mainObject.Location.Y &&
-                        secondObject.Location.Y < (mainObject.Location.Y + mainObject.Size.Height))
-                    {
-                        return new PointF[] 
-                        {
-                            mainObjectGateway,
-                            new PointF(mainObjectGateway.X, mainObjectGateway.Y + 20),
-                            new PointF(secondObjectGateway.X, secondObjectGateway.Y + 20),
-                            secondObjectGateway
-                        };
-                    }
-
-                    return new PointF[]
-                    {
-                        mainObjectGateway,
-                        new PointF(mainObjectGateway.X, mainObjectGateway.Y + 20),
-                        new PointF(secondObjectGateway.X, mainObjectGateway.Y + 20),
-                        secondObjectGateway
-                    };
-                })(),
+                    mainObjectGateway,
+                    new PointF(mainObjectGateway.X, mainObjectGateway.Y + distY / 2),
+                    new PointF(secondObjectGateway.X, mainObjectGateway.Y + distY / 2),
+                    secondObjectGateway
+                }
         };
     }
 }

@@ -44,6 +44,7 @@ partial class Form_ManageObject
         comboBox_Stereotype = new System.Windows.Forms.ComboBox();
         lb = new System.Windows.Forms.Label();
         checkBox_Abstract = new System.Windows.Forms.CheckBox();
+        checkBox_Static = new System.Windows.Forms.CheckBox();
         SuspendLayout();
         // 
         // textbox_Name
@@ -167,11 +168,22 @@ partial class Form_ManageObject
         checkBox_Abstract.UseVisualStyleBackColor = true;
         checkBox_Abstract.CheckedChanged += checkBox_Abstract_CheckedChanged;
         // 
+        // checkBox_Static
+        // 
+        checkBox_Static.Location = new System.Drawing.Point(122, 96);
+        checkBox_Static.Name = "checkBox_Static";
+        checkBox_Static.Size = new System.Drawing.Size(104, 24);
+        checkBox_Static.TabIndex = 16;
+        checkBox_Static.Text = "static";
+        checkBox_Static.UseVisualStyleBackColor = true;
+        checkBox_Static.CheckedChanged += checkBox_Static_CheckedChanged;
+        // 
         // Form_ManageObject
         // 
         AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
         AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
         ClientSize = new System.Drawing.Size(612, 345);
+        Controls.Add(checkBox_Static);
         Controls.Add(checkBox_Abstract);
         Controls.Add(lb);
         Controls.Add(comboBox_Stereotype);
@@ -191,6 +203,8 @@ partial class Form_ManageObject
         ResumeLayout(false);
         PerformLayout();
     }
+
+    private System.Windows.Forms.CheckBox checkBox_Static;
 
     private System.Windows.Forms.CheckBox checkBox_Abstract;
 

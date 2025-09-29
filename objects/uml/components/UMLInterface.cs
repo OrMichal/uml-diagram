@@ -6,9 +6,13 @@ using uml_diagram.interfaces;
 
 namespace uml_diagram.objects.uml.components;
 
-public class UMLInterface : UMLObject, IImplementable, IImplementationTarget
+public class UMLInterface : UMLObject, IImplementable, IImplementationTarget, IConnectableComponent
 {
     public string Guid { get; set; }
+    public PointF TopCenter { get => new PointF(Location.X + Size.Width / 2, Location.Y); }
+    public PointF RightCenter { get => new PointF(Location.X + Size.Width, Location.Y + Size.Height / 2); }
+    public PointF BottomCenter { get => new PointF(Location.X + Size.Width / 2, Location.Y + Size.Height); }
+    public PointF LeftCenter { get => new PointF(Location.X, Location.Y + Size.Height /2); }
 
     public UMLInterface()
     {
@@ -22,7 +26,7 @@ public class UMLInterface : UMLObject, IImplementable, IImplementationTarget
         this.Size = GetSize(g);
         PointF cursor = new PointF(this.Location.X, this.Location.Y);
 
-        g.DrawRectangle(DiagramSettings.ThickPen, cursor.X, cursor.Y, this.Size.Width, this.Size.Height);
+        g.DrawRectangle(DiagramSettings.MediumPen, cursor.X, cursor.Y, this.Size.Width, this.Size.Height);
 
         StringFormat centerFormat = new StringFormat();
         centerFormat.Alignment = StringAlignment.Center;

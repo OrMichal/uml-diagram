@@ -37,10 +37,14 @@ public partial class Form1 : Form
     private void pictureBox1_MouseDown(object sender, MouseEventArgs e)
     {
         this.mouseDown = true;
+        
     }
 
     private void pictureBox1_MouseMove(object sender, MouseEventArgs e)
     {
+        _diagram.SelectComponent(e.Location);
+        pbox_Diagram.Refresh();
+        
         IComponent? component = _diagram.GetHoveredComponent(e.Location);
         if(component is null)
         {
@@ -84,6 +88,9 @@ public partial class Form1 : Form
         if ((e.Button & MouseButtons.Left) != 0)
         {
             _scrollMenu?._menu.Close();
+            _diagram.SelectComponent(e.Location);
+            
+            pbox_Diagram.Refresh();
 
             if (!_diagram.Linker.HasTarget()) return;
 
@@ -104,5 +111,14 @@ public partial class Form1 : Form
     private void Form1_ResizeEnd(object sender, EventArgs e)
     {
         pbox_Diagram.Size = this.Size;
+    }
+
+    private void Form1_KeyDown(object sender, KeyEventArgs e)
+    {
+        if(e.KeyCode == Keys.Delete)
+        {
+            _diagram.RemoveSelectedComponent();
+        }
+        pbox_Diagram.Refresh();
     }
 }

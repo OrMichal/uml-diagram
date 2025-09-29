@@ -41,6 +41,7 @@ public partial class Form_ManageObject : Form
         this.Controls.Add(new Label(){ Location = comboBox_Stereotype.Location, Text = umlObject.Stereotype});
         this.comboBox_Stereotype.Text = this.UmlObject.Stereotype;
         this.checkBox_Abstract.Checked = umlObject.Abstract;
+        this.checkBox_Static.Checked = umlObject.Static;
         
         this.UmlObject.Methods.ForEach(m => this.listbox_Methods.Items.Add(m.ToString()));
         this.UmlObject.Properties.ForEach(p => this.listbox_Properties.Items.Add(p.ToString()));
@@ -132,13 +133,12 @@ public partial class Form_ManageObject : Form
 
     private void checkBox_Abstract_CheckedChanged(object sender, EventArgs e)
     {
-        if (this.comboBox_Accessibility.Text == "interface")
+        if (this.checkBox_Abstract.Checked)
         {
-            this.checkBox_Abstract.Checked = false;
-            MessageBox.Show("Interface cannot be abstract");
+            this.checkBox_Static.Checked = false;
+            UmlObject.Static = false;
+            UmlObject.Abstract = true;
         }
-        
-        UmlObject.Abstract = this.checkBox_Abstract.Checked;
     }
 
     private void checkBox_Unsafe_CheckedChanged(object sender, EventArgs e)
@@ -162,6 +162,16 @@ public partial class Form_ManageObject : Form
             UmlObject.Methods.RemoveAt(listbox_Methods.SelectedIndex);
             listbox_Methods.RemoveSelectedItem();
             
+        }
+    }
+
+    private void checkBox_Static_CheckedChanged(object sender, EventArgs e)
+    {
+        if (this.checkBox_Static.Checked)
+        {
+            this.checkBox_Abstract.Checked = false;
+            UmlObject.Abstract = false;
+            UmlObject.Static = true;
         }
     }
 }

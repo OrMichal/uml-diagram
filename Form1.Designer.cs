@@ -63,6 +63,7 @@ partial class Form1
         StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
         Text = "Form1";
         ResizeEnd += Form1_ResizeEnd;
+        KeyDown += Form1_KeyDown;
         ((System.ComponentModel.ISupportInitialize)pbox_Diagram).EndInit();
         ResumeLayout(false);
     }

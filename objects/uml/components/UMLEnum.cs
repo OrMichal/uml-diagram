@@ -14,7 +14,7 @@ public class UMLEnum : UMLObject
         this.Size = GetSize(g);
         PointF cursor = new PointF(this.Location.X, this.Location.Y);
 
-        g.DrawRectangle(DiagramSettings.ThickPen, cursor.X, cursor.Y, this.Size.Width, this.Size.Height);
+        g.DrawRectangle(DiagramSettings.MediumPen, cursor.X, cursor.Y, this.Size.Width, this.Size.Height);
 
         StringFormat centerFormat = new StringFormat();
         centerFormat.Alignment = StringAlignment.Center;
@@ -26,7 +26,7 @@ public class UMLEnum : UMLObject
         RectangleF nameBounds = new RectangleF(this.Location.X, this.Location.Y + headerHeight / 2, this.Size.Width, headerHeight / 2);
 
         g.DrawString("<<Enumeration>>", DiagramSettings.Font, DiagramSettings.LightBrush, stereotypeBounds, centerFormat);
-        g.DrawString(this.Name, new Font(DiagramSettings.Font, this.Abstract ? FontStyle.Italic : FontStyle.Regular), DiagramSettings.LightBrush, nameBounds, centerFormat);
+        g.DrawString(this.Name, DiagramSettings.Font, DiagramSettings.LightBrush, nameBounds, centerFormat);
 
         float curY = this.Location.Y + headerHeight + this.gap;
 
