@@ -1,4 +1,5 @@
-﻿using uml_diagram.interfaces;
+﻿using uml_diagram.extensions;
+using uml_diagram.interfaces;
 using uml_diagram.objects.uml;
 using uml_diagram.objects.uml.linkers;
 using uml_diagram.ui;
@@ -39,7 +40,7 @@ public class Diagram
         });
         ClickMenu.AddAction("implement interface", (sender, ev) =>
         {
-            if(GetHoveredComponent(ClickMenu.Location) is IImplementationTarget target) Linker.SetTarget(target);
+            if(GetHoveredComponent(ClickMenu.Location) is IImplementationTarget target) Linker.SetTarget(target.TryAs<UMLObject>());
         });
 
         LinkableObjectDeleted += Linker.OnLinkableObjectDeleted;
@@ -113,7 +114,7 @@ public class Diagram
 
     public void ImplementInterface(IImplementable @interface)
     {
-        Linker.Link(@interface);
+        Linker.Link(@interface.TryAs<UMLObject>());
         Linker.NullifyTarget();
     }
 
