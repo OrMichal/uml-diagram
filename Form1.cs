@@ -117,6 +117,9 @@ public partial class Form1 : Form
     {
         if(e.KeyCode == Keys.Delete)
         {
+            if(DialogResult.OK != MessageBox.Show("Are you sure?", "haha", MessageBoxButtons.OKCancel, MessageBoxIcon.Exclamation))
+                return;
+            
             _diagram.RemoveSelectedComponent();
         }
         pbox_Diagram.Refresh();

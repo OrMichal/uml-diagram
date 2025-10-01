@@ -67,13 +67,13 @@ public class ObservableTreeNode<T>
         }
     }
 
-    public IEnumerator<ObservableTreeNode<T>> GetEnumerator()
+    public IEnumerable<ObservableTreeNode<T>> GetEnumerator()
     {
         yield return this;
 
         foreach (var child in Children)
         {
-            foreach (var desc in child)
+            foreach (var desc in child.GetEnumerator())
                 yield return desc;
         }
     }

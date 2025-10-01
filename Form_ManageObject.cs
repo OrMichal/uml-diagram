@@ -43,8 +43,8 @@ public partial class Form_ManageObject : Form
         this.checkBox_Abstract.Checked = umlObject.Abstract;
         this.checkBox_Static.Checked = umlObject.Static;
         
-        this.UmlObject.Methods.ForEach(m => this.listbox_Methods.Items.Add(m.ToString()));
-        this.UmlObject.Properties.ForEach(p => this.listbox_Properties.Items.Add(p.ToString()));
+        this.UmlObject.Methods.ToList().ForEach(m => this.listbox_Methods.Items.Add(m.ToString()));
+        this.UmlObject.Properties.ToList().ForEach(p => this.listbox_Properties.Items.Add(p.ToString()));
         this.Refresh();
     }
     
@@ -104,7 +104,7 @@ public partial class Form_ManageObject : Form
     {
         if (this.listbox_Properties.Items.Count == 0 && Result.Run(() => this.listbox_Properties.SelectedIndex.ToString()) is not null) return;
         
-        UMLObjectProperty property = UmlObject.Properties[this.listbox_Properties.SelectedIndex];
+        UMLObjectProperty property = UmlObject.Properties.ToList()[this.listbox_Properties.SelectedIndex];
         Form_ManageObjectProperty frm = new(property);
         if (DialogResult.OK == frm.ShowDialog())
         {
@@ -122,7 +122,7 @@ public partial class Form_ManageObject : Form
     {
         if (this.listbox_Methods.Items.Count == 0) return;
         
-        UMLObjectMethod method = UmlObject.Methods[this.listbox_Methods.SelectedIndex];
+        UMLObjectMethod method = UmlObject.Methods.ToList()[this.listbox_Methods.SelectedIndex];
         Form_ManageObjectMethod frm = new(method);
         if (DialogResult.OK == frm.ShowDialog())
         {
@@ -150,7 +150,7 @@ public partial class Form_ManageObject : Form
     {
         if (e.KeyCode == Keys.Delete)
         {
-            UmlObject.Properties.RemoveAt(listbox_Properties.SelectedIndex);
+            UmlObject.Properties.RemoveWhere(x => x.ToString() == listbox_Properties.SelectedItem);
             listbox_Properties.RemoveSelectedItem();
         }
     }
@@ -159,7 +159,7 @@ public partial class Form_ManageObject : Form
     {
         if (e.KeyCode == Keys.Delete)
         {
-            UmlObject.Methods.RemoveAt(listbox_Methods.SelectedIndex);
+            UmlObject.Methods.RemoveWhere(x => x.ToString() == listbox_Methods.SelectedItem);
             listbox_Methods.RemoveSelectedItem();
             
         }

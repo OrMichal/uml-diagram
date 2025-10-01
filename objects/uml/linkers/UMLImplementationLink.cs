@@ -1,5 +1,6 @@
 ﻿using System.Drawing.Drawing2D;
 using uml_diagram.core;
+using uml_diagram.extensions;
 using uml_diagram.interfaces;
 using uml_diagram.math.geometries;
 using uml_diagram.objects.uml.components;
@@ -22,28 +23,41 @@ public class UMLImplementationLink : IComponent, IInteractable, ILink
         
     }
 
-    public UMLImplementationLink(UMLObject target, UMLObject @interface)
+    public UMLImplementationLink(UMLObject target)
     {
         ObservableTreeNode<UMLObject> root = new(target);
         Implementations = root;
-        Implementations.Value = target;
-        Implementations.AddChild(@interface);
+    }
+
+    public void Draw(Graphics g)
+    {
+        Draw(g, null);
     }
     
-    public void Draw(Graphics g) 
+    public void Draw(Graphics g, ObservableTreeNode<UMLObject>? implnode = null)
     {
+        if (implnode is null)
+            implnode = Implementations;
+
         Pen p = DiagramSettings.LightPen;
         p.DashStyle = DashStyle.Dash;
-        if (this.Target is UMLClass umlClass && Target is UMLInterface umlInterface)
+
+        foreach (var node in implnode.Children)
         {
-            g.DrawLines(p, PositionGeometry.CalcRelationShipPath(umlClass, umlInterface));
-        }
-        else if (this.Target is UMLInterface umlTargetInterface && Target is UMLInterface umlSrcInterface)
-        {
-            g.DrawLines(p, PositionGeometry.CalcRelationShipPath(umlTargetInterface, umlSrcInterface));
+            if (implnode.Value is UMLClass umlClass)
+            {
+                g.DrawLines(p,
+                    PositionGeometry.CalcRelationShipPath(umlClass, node.Value as UMLInterface));
+                Draw(g, node);
+            }
+            else if(implnode.Value is UMLInterface umlInterface){
+                g.DrawLines(p,
+                    PositionGeometry.CalcRelationShipPath(umlInterface, node.Value as UMLInterface));
+                Draw(g, node);
+            }
         }
     }
-    
+
     public void DrawSelected(Graphics g) 
     {
         Pen p = DiagramSettings.LightPen;

@@ -55,7 +55,7 @@ public class UMLClass : UMLObject, IInheritable, IAbstractable, IImplementationT
 
             UIGraphics.DrawPropsFlexbox(g, DiagramSettings.Font, DiagramSettings.LightBrush, new PointF(this.Location.X, curY), this.Properties, this.listIndent);
 
-            curY += this.Properties.Count * (g.MeasureString(this.Properties[0].ToString(), DiagramSettings.Font).Height + this.listIndent);
+            curY += this.Properties.Count * (g.MeasureString(this.Properties.FirstOrDefault().ToString(), DiagramSettings.Font).Height + this.listIndent);
 
             UIGraphics.DrawLineHorizontal(g, DiagramSettings.LightPen, new PointF(this.Location.X, curY), this.Size.Width);
             curY += this.gap;
@@ -66,7 +66,7 @@ public class UMLClass : UMLObject, IInheritable, IAbstractable, IImplementationT
             curY += this.gap;
 
             UIGraphics.DrawPropsFlexbox(g, DiagramSettings.Font, DiagramSettings.LightBrush, new PointF(this.Location.X, curY), this.Methods, this.listIndent);
-            curY += this.Methods.Count * (g.MeasureString(this.Methods[0].ToString(), DiagramSettings.Font).Height + this.listIndent);
+            curY += this.Methods.Count * (g.MeasureString(this.Methods.FirstOrDefault().ToString(), DiagramSettings.Font).Height + this.listIndent);
         }
     }
 }

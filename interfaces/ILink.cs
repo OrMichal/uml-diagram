@@ -2,5 +2,5 @@
 
 public interface ILink
 {
-    
+    public void Draw(Graphics g);
 }

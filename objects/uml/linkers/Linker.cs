@@ -9,13 +9,7 @@ public class Linker
 {
     private UMLObject? _target { get; set; } = null;
     private List<ILink> _links = new();
-    public event Action<ILinkable> LinkBroken;
 
-    public Linker()
-    {
-        LinkBroken += OnLinkableObjectDeleted;
-    }
-    
     public void Link(UMLObject @interface)
     {
         if (!HasTarget()) return;
@@ -28,38 +22,26 @@ public class Linker
                 if (targetNode is not null)
                 {
                     var interNode = new ObservableTreeNode<UMLObject>(@interface);
+                    interNode.NodeAdded += OnNodeCreated;
+                    interNode.NodeChanged += OnNodeChanged;
+                    interNode.NodeRemoved += OnNodeDeleted;
+                    
                     targetNode.AddChild(interNode);
                 }
             }
         });
         
-        ILink link = new UMLImplementationLink(_target, @interface);
+        UMLImplementationLink link = new UMLImplementationLink(_target);
+        link.Implementations.NodeAdded += OnNodeCreated;
+        link.Implementations.NodeChanged += OnNodeChanged;
+        link.Implementations.NodeRemoved += OnNodeDeleted;
         _links.Add(link);
+        link.Implementations.AddChild(@interface);
     }
 
     public void DrawLinks(Graphics g)
     {
-        _links.ForEach(l =>
-        {
-            if(l is UMLImplementationLink umlImplLink) umlImplLink.Draw(g);
-        });
-    }
-
-    public void OnLinkableObjectDeleted(ILinkable linkable)
-    {
-        var linkedInterface = linkable.TryAs<UMLInterface>();
-        _links.ForEach(l =>
-        {
-            if (l is UMLImplementationLink implLink)
-            {
-                var linkedNode = implLink.Implementations.FindChild(linkedInterface);
-                foreach (var item in linkedNode.GetReverseEnumerator())
-                {
-                    linkedInterface.Properties.ForEach(p => linkedNode.Value.Properties.Remove(p));
-                    linkedInterface.Methods.ForEach(m => linkedNode.Value.Methods.Remove(m));
-                }
-            }
-        });
+        _links.ForEach(l => l.Draw(g));
     }
     
     public void SetTarget(UMLObject target) => this._target = target;
@@ -67,19 +49,29 @@ public class Linker
     public void NullifyTarget() => _target = null;
     public void OnNodeCreated(ObservableTreeNode<UMLObject> node)
     {
-        foreach (var item in node.GetReverseEnumerator())
+        var items = node.GetReverseEnumerator().ToList();
+        foreach(var item in items)
         {
-            item.Value.Properties = item.Value.Properties.Union(node.Value.Properties).ToList();
-            item.Value.Methods = item.Value.Methods.Union(node.Value.Methods).ToList();
+            item.Value.Properties.UnionWith(node.Value.Properties);
+            item.Value.Methods.UnionWith(node.Value.Methods);
+
         }
+        int c = 0;
     }
 
     public void OnNodeDeleted(ObservableTreeNode<UMLObject> node)
     {
-        foreach (var item in node.GetReverseEnumerator())
+        List<ObservableTreeNode<UMLObject>> items = node.GetReverseEnumerator().ToList();
+        for(int i = 0; i < items.Count; i++)
         {
-            node.Value.Properties.ForEach(p => item.Value.Properties.Remove(p));
-            node.Value.Methods.ForEach(m => item.Value.Methods.Remove(m));
+            items[i].Value.Properties.Except(node.Value.Properties).ToList();
+            items[i].Value.Methods.Except(node.Value.Methods).ToList();
         }
+    }
+    
+    public void OnNodeChanged(ObservableTreeNode<UMLObject> node)
+    {
+        OnNodeDeleted(node);
+        OnNodeCreated(node);
     }
 }
