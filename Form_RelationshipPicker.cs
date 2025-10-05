@@ -2,6 +2,7 @@
 using uml_diagram.interfaces;
 using uml_diagram.math.geometries;
 using uml_diagram.objects.uml;
+using uml_diagram.objects.uml.linkers;
 using uml_diagram.ui;
 using uml_diagram.ui.elements;
 
@@ -29,32 +30,56 @@ public partial class Form_RelationshipPicker : Form
 
     private void button_Association_Click(object sender, EventArgs e)
     {
-        
+        if(_target is IAssociable associableTarget)
+            Link = new UMLAssociationLink(associableTarget, null, false);
+
+        DialogResult = DialogResult.OK;
+        Close();
     }
 
     private void button_DirectAssociation_Click(object sender, EventArgs e)
     {
-        
+        if(_target is IAssociable associableTarget)
+            Link = new UMLAssociationLink(associableTarget, null, true);
+
+        DialogResult = DialogResult.OK;
+        Close();
     }
 
     private void button_ReflexiveAssociation_Click(object sender, EventArgs e)
     {
-        
+        if(_target is IAssociable associable)
+            Link = new UMLReflexiveAssociationLink(associable);
+
+        DialogResult = DialogResult.OK;
+        Close();
     }
 
     private void button_Multiplicity_Click(object sender, EventArgs e)
     {
+        if (_target is IMultiplicable multiplicable)
+            Link = new UMLMultiplicityLink(multiplicable, null);
         
+        DialogResult = DialogResult.OK;
+        Close();
     }
 
     private void button_Aggregation_Click(object sender, EventArgs e)
     {
+        if(_target is IAggregatable aggregatable)
+            Link = new UMLAggregationLink(aggregatable, null);
         
+        DialogResult = DialogResult.OK;
+        Close();
     }
 
     private void button_Composition_Click_1(object sender, EventArgs e)
     {
-        
+        if (_target is IComposable composable)
+            Link = new UMLCompositionLink(composable, null);
+
+        DialogResult = DialogResult.OK;
+        Close();
     }
 
     private void button_Composition_Click(object sender, EventArgs e)
@@ -64,12 +89,20 @@ public partial class Form_RelationshipPicker : Form
 
     private void button_Inheritance_Click(object sender, EventArgs e)
     {
-        
+        if (_target is IInheritable inheritable)
+            Link = new UMLInheritenceLink(inheritable, null);
+
+        DialogResult = DialogResult.OK;
+        Close();
     }
 
     private void button_Realization_Click_1(object sender, EventArgs e)
     {
-        
+        if (_target is UMLObject implementable)
+            Link = new UMLImplementationLink(implementable);
+
+        DialogResult = DialogResult.OK;
+        Close();
     }
 
     private void button_Realization_Click(object sender, EventArgs e)

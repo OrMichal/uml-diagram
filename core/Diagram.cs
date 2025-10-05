@@ -54,12 +54,28 @@ public class Diagram
 
     public void FinalizeLink(UMLObject secondObject)
     {
+        if (_currLink is UMLImplementationLink implLink)
+        { 
+            Linker.Link(secondObject);
+            return;
+        }
+
         Linker.AddLink(_currLink switch
         {  
-             UMLAssociationLink associationLink =>
-                 new UMLAssociationLink(associationLink.FirstObject, secondObject.TryAs<IAssociable>())
+             UMLAssociationLink associationLink => associationLink.DirectAssociation 
+                 ? new UMLAssociationLink(associationLink.FirstObject, secondObject.TryAs<IAssociable>(), true) 
+                 : new UMLAssociationLink(associationLink.FirstObject, secondObject.TryAs<IAssociable>()),
+             UMLAggregationLink aggregationLink => new UMLAggregationLink(aggregationLink.FirstObject, secondObject.TryAs<IAggregatable>()),
+             UMLCompositionLink compositionLink => new UMLCompositionLink(compositionLink.FirstObject, secondObject.TryAs<IComposable>()),
+             UMLInheritenceLink inheritenceLink => new UMLInheritenceLink(inheritenceLink.FirstObject, secondObject.TryAs<IInheritable>()),
+             UMLMultiplicityLink multiplicityLink => new UMLMultiplicityLink(multiplicityLink.FirstObject, secondObject.TryAs<IMultiplicable>()),
+             UMLReflexiveAssociationLink reflexiveAssociationLink => new UMLReflexiveAssociationLink(reflexiveAssociationLink.TryAs<IAssociable>())
         });
+        
+        DiscardCurrLink();
     }
+    
+    public void DiscardCurrLink() => this._currLink = null;
     
     public void AddObject(UMLObject obj)
     {

@@ -6,7 +6,8 @@ using uml_diagram.interfaces;
 
 namespace uml_diagram.objects.uml.components;
 
-public class UMLInterface : UMLObject, IImplementable, IImplementationTarget, IConnectableComponent, IAssociable
+public class UMLInterface : UMLObject, IImplementable, IImplementationTarget, IConnectableComponent, IAssociable,
+    IReflexiveAssociable, IMultiplicable, IAggregatable, IComposable
 {
     public string Guid { get; set; }
     public PointF TopCenter { get => new PointF(Location.X + Size.Width / 2, Location.Y); }

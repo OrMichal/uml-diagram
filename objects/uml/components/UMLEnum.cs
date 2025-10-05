@@ -1,10 +1,11 @@
 ﻿using System.Drawing.Drawing2D;
 using uml_diagram.core;
+using uml_diagram.interfaces;
 using uml_diagram.ui;
 
 namespace uml_diagram.objects.uml.components;
 
-public class UMLEnum : UMLObject
+public class UMLEnum : UMLObject, IAssociable, IMultiplicable, IAggregatable, IComposable
 {
     public override void Draw(Graphics g)
     {

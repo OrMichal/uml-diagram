@@ -132,11 +132,12 @@ public partial class Form1 : Form
 
             if (!_diagram.Linker.HasTarget()) return;
 
-            if (_diagram.GetHoveredComponent(e.Location) is IImplementable umlInterface)
+            if (_diagram.GetHoveredComponent(e.Location) is UMLObject umlObj)
             {
-                _diagram.ImplementInterface(umlInterface);
+                _diagram.FinalizeLink(umlObj);
                 this.pbox_Diagram.Refresh();
                 _diagram.implementing = false;
+                _diagram.Linker.NullifyTarget();
             }
         }
     }

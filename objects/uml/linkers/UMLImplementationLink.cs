@@ -19,11 +19,6 @@ public class UMLImplementationLink : IComponent, IInteractable, ILink
         get => Implementations.Value;
     }
 
-    public UMLImplementationLink()
-    {
-        
-    }
-
     public UMLImplementationLink(UMLObject target)
     {
         ObservableTreeNode<UMLObject> root = new(target);

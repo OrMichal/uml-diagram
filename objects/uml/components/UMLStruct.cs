@@ -5,7 +5,7 @@ using uml_diagram.ui;
 
 namespace uml_diagram.objects.uml.components;
 
-public class UMLStruct : UMLObject, IAssociable
+public class UMLStruct : UMLObject, IAssociable, IReflexiveAssociable, IMultiplicable, IAggregatable, IComposable
 {
     public override void Draw(Graphics g)
     {
