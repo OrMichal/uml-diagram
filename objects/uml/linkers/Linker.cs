@@ -39,6 +39,11 @@ public class Linker
         link.Implementations.AddChild(@interface);
     }
 
+    public void AddLink(ILink link)
+    {
+        _links.Add(link);
+    }
+
     public void DrawLinks(Graphics g)
     {
         _links.ForEach(l => l.Draw(g));

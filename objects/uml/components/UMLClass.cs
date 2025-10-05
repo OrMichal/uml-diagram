@@ -5,7 +5,7 @@ using uml_diagram.ui;
 
 namespace uml_diagram.objects.uml.components;
 
-public class UMLClass : UMLObject, IInheritable, IAbstractable, IImplementationTarget, IConnectableComponent
+public class UMLClass : UMLObject, IInheritable, IAbstractable, IImplementationTarget, IConnectableComponent, IAssociable
 {
     public string Guid {get; set;}
     public PointF TopCenter { get => new PointF(Location.X + Size.Width / 2, Location.Y); }

@@ -5,6 +5,7 @@ using uml_diagram.interfaces;
 using uml_diagram.math.geometries;
 using uml_diagram.objects.uml.components;
 using uml_diagram.types;
+using uml_diagram.ui;
 
 namespace uml_diagram.objects.uml.linkers;
 
@@ -46,13 +47,11 @@ public class UMLImplementationLink : IComponent, IInteractable, ILink
         {
             if (implnode.Value is UMLClass umlClass)
             {
-                g.DrawLines(p,
-                    PositionGeometry.CalcRelationShipPath(umlClass, node.Value as UMLInterface));
+                RelationshipGuidanceCouncil.DrawRealization(g, umlClass, node.Value as UMLInterface, new SizeF(16, 16));
                 Draw(g, node);
             }
             else if(implnode.Value is UMLInterface umlInterface){
-                g.DrawLines(p,
-                    PositionGeometry.CalcRelationShipPath(umlInterface, node.Value as UMLInterface));
+                RelationshipGuidanceCouncil.DrawRealization(g, umlInterface, node.Value as UMLInterface, new SizeF(16, 16));
                 Draw(g, node);
             }
         }

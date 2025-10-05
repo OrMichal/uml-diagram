@@ -32,15 +32,16 @@ partial class Form1
         components = new System.ComponentModel.Container();
         pbox_Diagram = new System.Windows.Forms.PictureBox();
         timer1 = new System.Windows.Forms.Timer(components);
+        menuStrip1 = new System.Windows.Forms.MenuStrip();
         ((System.ComponentModel.ISupportInitialize)pbox_Diagram).BeginInit();
         SuspendLayout();
         // 
         // pbox_Diagram
         // 
         pbox_Diagram.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-        pbox_Diagram.Location = new System.Drawing.Point(12, 12);
+        pbox_Diagram.Location = new System.Drawing.Point(12, 52);
         pbox_Diagram.Name = "pbox_Diagram";
-        pbox_Diagram.Size = new System.Drawing.Size(776, 426);
+        pbox_Diagram.Size = new System.Drawing.Size(776, 386);
         pbox_Diagram.TabIndex = 0;
         pbox_Diagram.TabStop = false;
         pbox_Diagram.Paint += pictureBox1_Paint;
@@ -54,19 +55,34 @@ partial class Form1
         // 
         timer1.Tick += timer1_Tick;
         // 
+        // menuStrip1
+        // 
+        menuStrip1.GripStyle = System.Windows.Forms.ToolStripGripStyle.Visible;
+        menuStrip1.LayoutStyle = System.Windows.Forms.ToolStripLayoutStyle.HorizontalStackWithOverflow;
+        menuStrip1.Location = new System.Drawing.Point(0, 0);
+        menuStrip1.Name = "menuStrip1";
+        menuStrip1.Size = new System.Drawing.Size(800, 24);
+        menuStrip1.TabIndex = 1;
+        menuStrip1.Text = "navbar";
+        // 
         // Form1
         // 
         AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
         AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
         ClientSize = new System.Drawing.Size(800, 450);
         Controls.Add(pbox_Diagram);
+        Controls.Add(menuStrip1);
+        MainMenuStrip = menuStrip1;
         StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
         Text = "Form1";
         ResizeEnd += Form1_ResizeEnd;
         KeyDown += Form1_KeyDown;
         ((System.ComponentModel.ISupportInitialize)pbox_Diagram).EndInit();
         ResumeLayout(false);
+        PerformLayout();
     }
+
+    private System.Windows.Forms.MenuStrip menuStrip1;
 
     private System.Windows.Forms.Timer timer1;
 

@@ -1,6 +1,7 @@
 ﻿using uml_diagram.extensions;
 using uml_diagram.interfaces;
 using uml_diagram.objects.uml;
+using uml_diagram.objects.uml.components;
 using uml_diagram.objects.uml.linkers;
 using uml_diagram.ui;
 
@@ -14,6 +15,7 @@ public class Diagram
     public bool implementing = false;
     public Linker Linker = new();
     private IComponent? _selectedComponent;
+    private ILink? _currLink;
 
     public event Action<ILinkable> LinkableObjectDeleted;
     
@@ -38,15 +40,39 @@ public class Diagram
         {
             EditUMLObject(ClickMenu.Location);
         });
-        ClickMenu.AddAction("implement interface", (sender, ev) =>
+        ClickMenu.AddAction("add relationship", (sender, ev) =>
         {
-            if(_selectedComponent is IImplementationTarget target) Linker.SetTarget(target.TryAs<UMLObject>());
+            Linker.SetTarget(_selectedComponent.TryAs<UMLObject>());
+            Form_RelationshipPicker frm = new(_selectedComponent.TryAs<UMLObject>());
+            
+            if(DialogResult.OK == frm.ShowDialog())
+            {
+                _currLink = frm.Link;
+            }
+        });
+    }
+
+    public void FinalizeLink(UMLObject secondObject)
+    {
+        Linker.AddLink(_currLink switch
+        {  
+             UMLAssociationLink associationLink =>
+                 new UMLAssociationLink(associationLink.FirstObject, secondObject.TryAs<IAssociable>())
         });
     }
     
     public void AddObject(UMLObject obj)
     {
         Components.Add(obj);
+    }
+    
+    public void RemoveComponent(IComponent @object) 
+    {
+        if (@object is not null)
+            Components.Remove(@object);
+        
+        if(@object is ILinkable linkable)
+            LinkableObjectDeleted?.Invoke(linkable);
     }
 
     public void RemoveObjectByLocation(Point e)
@@ -61,13 +87,7 @@ public class Diagram
             return false;
         });
         
-        if (component is not null)
-            Components.Remove(component);
-
-        if (component is ILinkable linkable)
-        {
-            LinkableObjectDeleted?.Invoke(linkable);
-        }
+        RemoveComponent(component);
     }
 
     public IComponent? GetHoveredComponent(Point e)
@@ -109,10 +129,16 @@ public class Diagram
             umlObject = frm.UmlObject;
         }
     }
-
+    
     public void ImplementInterface(IImplementable @interface)
     {
         Linker.Link(@interface.TryAs<UMLObject>());
+        Linker.NullifyTarget();
+    }
+
+    public void InheritClass(IInheritable inheritable)
+    {
+        Linker.Link(inheritable.TryAs<UMLObject>());
         Linker.NullifyTarget();
     }
 

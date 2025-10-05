@@ -14,7 +14,8 @@ public partial class Form1 : Form
     public Form1()
     {
         InitializeComponent();
-        this.pbox_Diagram.Location = new(0, 0);
+        InitializeNavbar();
+        this.pbox_Diagram.Location = new(0, menuStrip1.Size.Height);
         this.pbox_Diagram.Size = this.Size;
         this._scrollMenu = _diagram.ClickMenu;
         this.ContextMenuStrip = _diagram.ClickMenu.GetMenu();
@@ -22,6 +23,43 @@ public partial class Form1 : Form
         
         this._diagram.ClickMenu._menu.Opened += (sender, args) => 
             this._diagram.ClickMenu.Location = this.pbox_Diagram.PointToClient(this._diagram.ClickMenu._menu.Location);
+    }
+
+    public void InitializeNavbar()
+    {
+        ToolStripMenuItem projectItem = new("Project");
+        ToolStripMenuItem diagramItem = new("Diagram");
+        ToolStripMenuItem windowItem = new("Window");
+        
+        ToolStripMenuItem diagramAddObjectItem = new("Add Object");
+        ToolStripMenuItem diagramImplementInterfaceItem = new("Implement interface");
+        ToolStripMenuItem diagramAddAssociationItem = new("Add Association");
+
+        ToolStripMenuItem windowExitItem = new("Quit");
+        
+        diagramAddObjectItem.Click += (s, e) =>
+        {
+            OpenAddObjectForm(new(40, 40));
+        };
+
+        diagramAddAssociationItem.Click += (s, e) =>
+        {
+            
+        };
+
+        windowExitItem.Click += (s, e) =>
+        {
+
+            if (DialogResult.OK == MessageBox.Show("Are you sure you want to quit?", "Quit", MessageBoxButtons.OKCancel))
+            {
+                Environment.Exit(0);
+            }
+        };
+        
+        diagramItem.DropDownItems.AddRange(new[] { diagramAddObjectItem, diagramImplementInterfaceItem });
+        windowItem.DropDownItems.AddRange(new[] { windowExitItem });
+        
+        menuStrip1.Items.AddRange(new[] { projectItem, diagramItem, windowItem });
     }
 
     private void button1_Click(object sender, EventArgs e)
@@ -123,5 +161,14 @@ public partial class Form1 : Form
             _diagram.RemoveSelectedComponent();
         }
         pbox_Diagram.Refresh();
+    }
+
+    private void OpenAddObjectForm(Point objLocation)
+    {
+        Form_ManageObject frm = new(objLocation);
+        if (DialogResult.OK == frm.ShowDialog())
+        {
+            _diagram.AddObject(frm.UmlObject);
+        }
     }
 }

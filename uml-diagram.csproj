@@ -7,6 +7,7 @@
         <Nullable>enable</Nullable>
         <UseWindowsForms>true</UseWindowsForms>
         <ImplicitUsings>enable</ImplicitUsings>
+	<EnableSourceControlManagerQueries>false</EnableSourceControlManagerQueries>
     </PropertyGroup>
 
     <ItemGroup>
@@ -20,6 +21,12 @@
         <SubType>Form</SubType>
       </Compile>
       <Compile Update="Form_ManageObjectMethodParameter.cs">
+        <SubType>Form</SubType>
+      </Compile>
+      <Compile Update="forms\relationships\Form_ManageAssociation.cs">
+        <SubType>Form</SubType>
+      </Compile>
+      <Compile Update="Form_RelationshipPicker.cs">
         <SubType>Form</SubType>
       </Compile>
     </ItemGroup>

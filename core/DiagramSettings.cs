@@ -3,6 +3,9 @@
 public static class DiagramSettings
 {
     public static Font Font = new("Arial", 12);
+    public static Font MediumFont = new("Arial", 10);
+    public static Font LightFont = new("Arial", 8);
+    public static Font SmolFont = new("Arial", 6);
     
     public static Pen LightPen = new(Color.Black, 1);
     public static Pen MediumPen = new(Color.Black, 2);
