@@ -50,6 +50,8 @@ public class Diagram
                 _currLink = frm.Link;
             }
         });
+
+        LinkableObjectDeleted += Linker.OnLinkableDeleted;
     }
 
     public void FinalizeLink(UMLObject secondObject)
@@ -122,15 +124,42 @@ public class Diagram
         return res;
     }
 
+    public ILink? GetHoveredLink(Point e)
+    {
+        var res = Linker._links.Find(l =>
+        {
+            if(l is IInteractable interactable)
+                return interactable.IsCursorHovering(e);
+            
+            return false;
+        });
+
+        if(res is IComponent component)
+            _lastActive = component;
+        return res;
+    }
+
     public void SelectComponent(Point e)
     {
-        _selectedComponent = GetHoveredComponent(e);
+        IComponent? component = GetHoveredComponent(e);
+        if (component is not null)
+        {
+            _selectedComponent = component;
+            return;
+        }
+
+        ILink link = GetHoveredLink(e);
+        if(link is not null)
+            _selectedComponent = link as IComponent;
     }
 
     public void RemoveSelectedComponent()
     {
-        if(_selectedComponent is not null)
+        if(_selectedComponent is not null && Components.Contains(_selectedComponent))
             Components.Remove(_selectedComponent);
+        
+        if(_selectedComponent is not null && _selectedComponent is ILink link)
+            Linker.RemoveLink(link);
     }
     
     public void EditUMLObject(Point e)
