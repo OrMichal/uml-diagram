@@ -33,15 +33,18 @@ partial class Form1
         pbox_Diagram = new System.Windows.Forms.PictureBox();
         timer1 = new System.Windows.Forms.Timer(components);
         menuStrip1 = new System.Windows.Forms.MenuStrip();
+        treeView_Namespaces = new System.Windows.Forms.TreeView();
+        label_CurrentNamespace = new System.Windows.Forms.Label();
         ((System.ComponentModel.ISupportInitialize)pbox_Diagram).BeginInit();
         SuspendLayout();
         // 
         // pbox_Diagram
         // 
+        pbox_Diagram.BackColor = System.Drawing.SystemColors.Control;
         pbox_Diagram.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-        pbox_Diagram.Location = new System.Drawing.Point(12, 52);
+        pbox_Diagram.Location = new System.Drawing.Point(0, 49);
         pbox_Diagram.Name = "pbox_Diagram";
-        pbox_Diagram.Size = new System.Drawing.Size(776, 386);
+        pbox_Diagram.Size = new System.Drawing.Size(775, 389);
         pbox_Diagram.TabIndex = 0;
         pbox_Diagram.TabStop = false;
         pbox_Diagram.Paint += pictureBox1_Paint;
@@ -61,15 +64,34 @@ partial class Form1
         menuStrip1.LayoutStyle = System.Windows.Forms.ToolStripLayoutStyle.HorizontalStackWithOverflow;
         menuStrip1.Location = new System.Drawing.Point(0, 0);
         menuStrip1.Name = "menuStrip1";
-        menuStrip1.Size = new System.Drawing.Size(800, 24);
+        menuStrip1.Size = new System.Drawing.Size(920, 24);
         menuStrip1.TabIndex = 1;
         menuStrip1.Text = "navbar";
+        // 
+        // treeView_Namespaces
+        // 
+        treeView_Namespaces.Location = new System.Drawing.Point(781, 27);
+        treeView_Namespaces.Name = "treeView_Namespaces";
+        treeView_Namespaces.Size = new System.Drawing.Size(139, 411);
+        treeView_Namespaces.TabIndex = 2;
+        treeView_Namespaces.AfterSelect += treeView_Namespaces_AfterSelect;
+        // 
+        // label_CurrentNamespace
+        // 
+        label_CurrentNamespace.Location = new System.Drawing.Point(12, 27);
+        label_CurrentNamespace.Name = "label_CurrentNamespace";
+        label_CurrentNamespace.Size = new System.Drawing.Size(100, 20);
+        label_CurrentNamespace.TabIndex = 3;
+        label_CurrentNamespace.Text = "label1";
         // 
         // Form1
         // 
         AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
         AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-        ClientSize = new System.Drawing.Size(800, 450);
+        BackColor = System.Drawing.Color.White;
+        ClientSize = new System.Drawing.Size(920, 450);
+        Controls.Add(label_CurrentNamespace);
+        Controls.Add(treeView_Namespaces);
         Controls.Add(pbox_Diagram);
         Controls.Add(menuStrip1);
         MainMenuStrip = menuStrip1;
@@ -77,10 +99,15 @@ partial class Form1
         Text = "Form1";
         ResizeEnd += Form1_ResizeEnd;
         KeyDown += Form1_KeyDown;
+        KeyUp += Form1_KeyUp;
         ((System.ComponentModel.ISupportInitialize)pbox_Diagram).EndInit();
         ResumeLayout(false);
         PerformLayout();
     }
+
+    private System.Windows.Forms.Label label_CurrentNamespace;
+
+    private System.Windows.Forms.TreeView treeView_Namespaces;
 
     private System.Windows.Forms.MenuStrip menuStrip1;
 

@@ -29,10 +29,23 @@
       <Compile Update="Form_RelationshipPicker.cs">
         <SubType>Form</SubType>
       </Compile>
+      <Compile Update="ErrorMessage.cs">
+        <SubType>Form</SubType>
+      </Compile>
+      <Compile Update="Form_GenerateCode.cs">
+        <SubType>Form</SubType>
+      </Compile>
     </ItemGroup>
 
     <ItemGroup>
       <Folder Include="math\records\" />
+      <Folder Include="src\images\" />
+      <Folder Include="src\logs\" />
+      <Folder Include="src\samples\" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <PackageReference Include="Newtonsoft.Json" Version="13.0.4" />
     </ItemGroup>
 
 </Project>

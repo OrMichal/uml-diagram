@@ -1,4 +1,5 @@
-﻿using uml_diagram.extensions;
+﻿using uml_diagram.data_managers;
+using uml_diagram.extensions;
 using uml_diagram.interfaces;
 using uml_diagram.objects.uml;
 using uml_diagram.objects.uml.components;
@@ -11,47 +12,27 @@ public class Diagram
 {
     public List<IComponent> Components = new();
     public ClickScrollMenu ClickMenu = new ClickScrollMenu();
+    
     private IComponent? _lastActive = null;
+    
     public bool implementing = false;
     public Linker Linker = new();
-    private IComponent? _selectedComponent;
-    private ILink? _currLink;
-
+    public IComponent? _selectedComponent;
+    
+    public ILink? _currLink;
+    public float _zoom = 1f;
+    
     public event Action<ILinkable> LinkableObjectDeleted;
+    public event Action<UMLObject> UMLObjectAdded;
+    public event Action<UMLObject> UMLObjectDeleted;
+    public event Action<UMLObject> UMLObjectChanged;
+
     
     public event Action<object, MouseEventArgs> pBoxClicked;
     
     public Diagram() 
     {
-        ClickMenu.AddAction("new object", (sender, ev) =>
-        {
-            Form_ManageObject frm = new Form_ManageObject(ClickMenu.Location);
-            if (DialogResult.OK == frm.ShowDialog())
-            {
-                var a = frm.UmlObject.ToUMLComponent();
-                AddObject(a);
-            }
-        });
-        ClickMenu.AddAction("remove object", (sender, ev) =>
-        {
-            RemoveObjectByLocation(ClickMenu.Location);
-        });
-        ClickMenu.AddAction("edit object", (sender, ev) =>
-        {
-            EditUMLObject(ClickMenu.Location);
-        });
-        ClickMenu.AddAction("add relationship", (sender, ev) =>
-        {
-            Linker.SetTarget(_selectedComponent.TryAs<UMLObject>());
-            Form_RelationshipPicker frm = new(_selectedComponent.TryAs<UMLObject>());
-            
-            if(DialogResult.OK == frm.ShowDialog())
-            {
-                _currLink = frm.Link;
-            }
-        });
-
-        LinkableObjectDeleted += Linker.OnLinkableDeleted;
+        
     }
 
     public void FinalizeLink(UMLObject secondObject)
@@ -78,16 +59,42 @@ public class Diagram
     }
     
     public void DiscardCurrLink() => this._currLink = null;
+
+    public SizeF CalculateCanvasSize()
+    {
+        var farestXComponent = Components.MaxBy(x => x.Location.X + x.Size.Width);
+        var farestYComponent = Components.MaxBy(x => x.Location.Y);
+
+        return new SizeF(farestXComponent.Location.X + farestXComponent.Size.Width + 20,
+            farestYComponent.Location.Y + farestYComponent.Size.Height);
+    }
+    
+    public void ImportData(string folderPath)
+    {
+        Importer imp = new();
+        if (!File.Exists(Path.Combine(folderPath, "links.json")) ||
+            !File.Exists(Path.Combine(folderPath, "components.json")))
+        {
+            return;
+        }
+        
+        Components = imp.GetComponentsFromJson(Path.Combine(folderPath, "components.json"));
+        Linker._links = imp.GetLinksFromJson(Path.Combine(folderPath, "links.json"));
+    }
     
     public void AddObject(UMLObject obj)
     {
+        UMLObjectAdded?.Invoke(obj);
         Components.Add(obj);
     }
     
     public void RemoveComponent(IComponent @object) 
     {
         if (@object is not null)
+        {
+            UMLObjectDeleted?.Invoke(@object as UMLObject);
             Components.Remove(@object);
+        }
         
         if(@object is ILinkable linkable)
             LinkableObjectDeleted?.Invoke(linkable);
@@ -124,42 +131,15 @@ public class Diagram
         return res;
     }
 
-    public ILink? GetHoveredLink(Point e)
-    {
-        var res = Linker._links.Find(l =>
-        {
-            if(l is IInteractable interactable)
-                return interactable.IsCursorHovering(e);
-            
-            return false;
-        });
-
-        if(res is IComponent component)
-            _lastActive = component;
-        return res;
-    }
-
     public void SelectComponent(Point e)
     {
-        IComponent? component = GetHoveredComponent(e);
-        if (component is not null)
-        {
-            _selectedComponent = component;
-            return;
-        }
-
-        ILink link = GetHoveredLink(e);
-        if(link is not null)
-            _selectedComponent = link as IComponent;
+        _selectedComponent = GetHoveredComponent(e);
     }
 
     public void RemoveSelectedComponent()
     {
-        if(_selectedComponent is not null && Components.Contains(_selectedComponent))
+        if(_selectedComponent is not null)
             Components.Remove(_selectedComponent);
-        
-        if(_selectedComponent is not null && _selectedComponent is ILink link)
-            Linker.RemoveLink(link);
     }
     
     public void EditUMLObject(Point e)
@@ -173,6 +153,8 @@ public class Diagram
         {
             umlObject = frm.UmlObject;
         }
+        
+        UMLObjectChanged?.Invoke(umlObject);
     }
     
     public void ImplementInterface(IImplementable @interface)
