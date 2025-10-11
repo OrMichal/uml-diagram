@@ -1,0 +1,113 @@
+{
+  "$type": "System.Collections.Generic.List`1[[uml_diagram.interfaces.IComponent, uml-diagram]], System.Private.CoreLib",
+  "$values": [
+    {
+      "$type": "uml_diagram.objects.uml.components.UMLClass, uml-diagram",
+      "Guid": "02349e26-19a8-4f6a-a239-dc8a29e33ebc",
+      "TopCenter": {
+        "$type": "System.Drawing.PointF, System.Drawing.Primitives",
+        "IsEmpty": false,
+        "X": 287.0,
+        "Y": 53.937515
+      },
+      "RightCenter": {
+        "$type": "System.Drawing.PointF, System.Drawing.Primitives",
+        "IsEmpty": false,
+        "X": 429.36194,
+        "Y": 147.0
+      },
+      "BottomCenter": {
+        "$type": "System.Drawing.PointF, System.Drawing.Primitives",
+        "IsEmpty": false,
+        "X": 287.0,
+        "Y": 240.06248
+      },
+      "LeftCenter": {
+        "$type": "System.Drawing.PointF, System.Drawing.Primitives",
+        "IsEmpty": false,
+        "X": 144.63805,
+        "Y": 147.0
+      },
+      "Stereotype": "class",
+      "Name": "Person",
+      "Accessibility": "public",
+      "Properties": {
+        "$type": "System.Collections.Generic.HashSet`1[[uml_diagram.objects.uml.UMLObjectProperty, uml-diagram]], System.Private.CoreLib",
+        "$values": [
+          {
+            "$type": "uml_diagram.objects.uml.UMLObjectProperty, uml-diagram",
+            "Accessibility": "private",
+            "Abstract": false,
+            "Name": "Name",
+            "Type": "string"
+          },
+          {
+            "$type": "uml_diagram.objects.uml.UMLObjectProperty, uml-diagram",
+            "Accessibility": "public",
+            "Abstract": true,
+            "Name": "Gender",
+            "Type": "bool"
+          }
+        ]
+      },
+      "Methods": {
+        "$type": "System.Collections.Generic.HashSet`1[[uml_diagram.objects.uml.UMLObjectMethod, uml-diagram]], System.Private.CoreLib",
+        "$values": [
+          {
+            "$type": "uml_diagram.objects.uml.UMLObjectMethod, uml-diagram",
+            "Accessibility": "public",
+            "Abstract": false,
+            "Name": "GetName",
+            "Type": "string",
+            "Parameters": {
+              "$type": "System.Collections.Generic.List`1[[uml_diagram.objects.uml.UMLObjectMethodParameter, uml-diagram]], System.Private.CoreLib",
+              "$values": []
+            }
+          },
+          {
+            "$type": "uml_diagram.objects.uml.UMLObjectMethod, uml-diagram",
+            "Accessibility": "public",
+            "Abstract": true,
+            "Name": "SayHi",
+            "Type": "void",
+            "Parameters": {
+              "$type": "System.Collections.Generic.List`1[[uml_diagram.objects.uml.UMLObjectMethodParameter, uml-diagram]], System.Private.CoreLib",
+              "$values": []
+            }
+          },
+          {
+            "$type": "uml_diagram.objects.uml.UMLObjectMethod, uml-diagram",
+            "Accessibility": "private",
+            "Abstract": false,
+            "Name": "Calculate",
+            "Type": "int",
+            "Parameters": {
+              "$type": "System.Collections.Generic.List`1[[uml_diagram.objects.uml.UMLObjectMethodParameter, uml-diagram]], System.Private.CoreLib",
+              "$values": [
+                {
+                  "$type": "uml_diagram.objects.uml.UMLObjectMethodParameter, uml-diagram",
+                  "Name": "n1",
+                  "Type": "double"
+                },
+                {
+                  "$type": "uml_diagram.objects.uml.UMLObjectMethodParameter, uml-diagram",
+                  "Name": "n2",
+                  "Type": "double"
+                }
+              ]
+            }
+          }
+        ]
+      },
+      "Location": {
+        "$type": "System.Drawing.PointF, System.Drawing.Primitives",
+        "IsEmpty": false,
+        "X": 144.63805,
+        "Y": 53.937515
+      },
+      "Size": "284.7239, 186.12497",
+      "Abstract": false,
+      "Static": false
+    }
+  ]
+}
