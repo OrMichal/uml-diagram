@@ -17,8 +17,8 @@ public partial class Form1 : Form
     
     private float _pageScale { get; set; } = 1f;
     private bool dragging = false;
-    private Point dragStart;
-    private Point pboxOffset = new(0, 0);
+    private PointF dragStart; 
+    private PointF pboxOffset = new(0, 0);
     
     private Diagram _diagram
     {
@@ -128,6 +128,7 @@ public partial class Form1 : Form
             }
             
             _diagram.ImportData(dialog.SelectedPath);
+            _diagram.Components.OfType<UMLObject>().ToList().ForEach(c => OnDiagramObjectAdded(c));
         };
 
         projectExportDiagramItem.Click += (s, e) =>
@@ -234,7 +235,13 @@ public partial class Form1 : Form
         }
     
     #endregion
-
+    
+    public void UpdateCanvas()
+    {
+        SizeF size = _diagram.CalculateCanvasSize();
+        _diagram._canvas = new((int)size.Width + 20, (int)size.Height + 20);
+    }
+    
     public void AddNamespace(string name)
     {
         Namespace ns = new(name);
@@ -264,7 +271,7 @@ public partial class Form1 : Form
     private void pictureBox1_Paint(object sender, PaintEventArgs e)
     {
         e.Graphics.ScaleTransform(_pageScale, _pageScale);
-        e.Graphics.TranslateTransform(dragStart.X, dragStart.Y);
+        e.Graphics.TranslateTransform(pboxOffset.X, pboxOffset.Y);
         _diagram.Draw(e.Graphics);
     }
 
@@ -284,15 +291,22 @@ public partial class Form1 : Form
 
     private void pictureBox1_MouseMove(object sender, MouseEventArgs e)
     {
-        PointF location = new(e.Location.X * _pageScale, e.Location.Y * _pageScale);
-        Point locat = new Point((int)location.X, (int)location.Y);
+        PointF diagramPos = new(
+            (e.X / _pageScale) - pboxOffset.X,
+            (e.Y / _pageScale) - pboxOffset.Y
+        );
+        Point locat = Point.Round(diagramPos);
         
         if(dragging)
         {
-            this.Cursor = Cursors.Cross;
-            pboxOffset = new((int)((e.X - dragStart.X)), (int)((e.Y - dragStart.Y)));
-            pbox_Diagram.Refresh();
+            float dx = (e.X - dragStart.X) / _pageScale;
+            float dy = (e.Y - dragStart.Y) / _pageScale;
+            
+            pboxOffset.X += dx;
+            pboxOffset.Y += dy;
+            
             dragStart = e.Location;
+            pbox_Diagram.Refresh();
         }
         
         _diagram.SelectComponent(locat);
@@ -322,15 +336,27 @@ public partial class Form1 : Form
 
     private void pictureBox1_MouseDoubleClick(object sender, MouseEventArgs e)
     {
-        if((e.Button & MouseButtons.Left) != 0 && _diagram.GetHoveredComponent(e.Location) is not null)
+        PointF diagramPos = new(
+            (e.X / _pageScale) - pboxOffset.X,
+            (e.Y / _pageScale) - pboxOffset.Y
+        );
+        Point locat = Point.Round(diagramPos);
+        
+        if((e.Button & MouseButtons.Left) != 0 && _diagram.GetHoveredComponent(locat) is not null)
         {
-            _diagram.EditUMLObject(e.Location);
+            _diagram.EditUMLObject(locat);
             pbox_Diagram.Refresh();
         }
     }
 
     private void pbox_Diagram_MouseClick(object sender, MouseEventArgs e)
     {
+        PointF diagramPos = new(
+            (e.X / _pageScale) - pboxOffset.X,
+            (e.Y / _pageScale) - pboxOffset.Y
+        );
+        Point locat = Point.Round(diagramPos);
+        
         if ((e.Button & MouseButtons.Right) != 0)
         {
             _scrollMenu.Show(this.pbox_Diagram, new(e.X, e.Y));
@@ -342,7 +368,7 @@ public partial class Form1 : Form
         if ((e.Button & MouseButtons.Left) != 0)
         {
             _scrollMenu?._menu.Close();
-            _diagram.SelectComponent(e.Location);
+            _diagram.SelectComponent(locat);
             
             pbox_Diagram.Refresh();
 

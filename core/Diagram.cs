@@ -21,6 +21,7 @@ public class Diagram
     
     public ILink? _currLink;
     public float _zoom = 1f;
+    public Bitmap _canvas = new(2000, 2000);
     
     public event Action<ILinkable> LinkableObjectDeleted;
     public event Action<UMLObject> UMLObjectAdded;

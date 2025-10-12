@@ -44,7 +44,7 @@ partial class Form1
         pbox_Diagram.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
         pbox_Diagram.Location = new System.Drawing.Point(0, 49);
         pbox_Diagram.Name = "pbox_Diagram";
-        pbox_Diagram.Size = new System.Drawing.Size(775, 389);
+        pbox_Diagram.Size = new System.Drawing.Size(1172, 538);
         pbox_Diagram.TabIndex = 0;
         pbox_Diagram.TabStop = false;
         pbox_Diagram.Paint += pictureBox1_Paint;
@@ -64,15 +64,15 @@ partial class Form1
         menuStrip1.LayoutStyle = System.Windows.Forms.ToolStripLayoutStyle.HorizontalStackWithOverflow;
         menuStrip1.Location = new System.Drawing.Point(0, 0);
         menuStrip1.Name = "menuStrip1";
-        menuStrip1.Size = new System.Drawing.Size(920, 24);
+        menuStrip1.Size = new System.Drawing.Size(1329, 24);
         menuStrip1.TabIndex = 1;
         menuStrip1.Text = "navbar";
         // 
         // treeView_Namespaces
         // 
-        treeView_Namespaces.Location = new System.Drawing.Point(781, 27);
+        treeView_Namespaces.Location = new System.Drawing.Point(1178, 27);
         treeView_Namespaces.Name = "treeView_Namespaces";
-        treeView_Namespaces.Size = new System.Drawing.Size(139, 411);
+        treeView_Namespaces.Size = new System.Drawing.Size(139, 560);
         treeView_Namespaces.TabIndex = 2;
         treeView_Namespaces.AfterSelect += treeView_Namespaces_AfterSelect;
         // 
@@ -89,7 +89,7 @@ partial class Form1
         AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
         AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
         BackColor = System.Drawing.Color.White;
-        ClientSize = new System.Drawing.Size(920, 450);
+        ClientSize = new System.Drawing.Size(1329, 599);
         Controls.Add(label_CurrentNamespace);
         Controls.Add(treeView_Namespaces);
         Controls.Add(pbox_Diagram);

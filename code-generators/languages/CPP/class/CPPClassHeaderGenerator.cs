@@ -93,7 +93,7 @@ public class CPPClassHeaderGenerator
 
         if (dependencies.Count <= 0) return "";
         
-        return ": public" + dependencies.Select(d =>
+        return ": public " + dependencies.Select(d =>
         {
             if(d is UMLInheritenceLink inheritenceLink && !inherited && inheritenceLink.SecondObject is UMLClass inheritedClass) 
             {
@@ -115,4 +115,5 @@ public class CPPClassHeaderGenerator
 
             return "";
         }).Aggregate((s1, s2) => $"{s1}, public {s2}");
-    }}
+    }
+}
